@@ -1,0 +1,33 @@
+name: Mantener la base despierta
+
+# En el plan gratuito de Supabase, el proyecto se pausa si pasa una semana sin
+# actividad en la base, y entonces los formularios no guardan. Esto la toca tres
+# veces al día. No lee ni escribe datos de nadie: despierta() solo contesta 'ok'.
+# Ver supabase/migrations/006_despierta.sql.
+#
+# Ojo: si el repositorio fuera público, GitHub apaga las tareas programadas tras
+# 60 días sin cambios en el repositorio. Por eso el repositorio es privado.
+
+on:
+  schedule:
+    - cron: "17 5,13,21 * * *"   # 07:17, 15:17 y 23:17 en Madrid (horario de verano)
+  workflow_dispatch: {}          # para lanzarlo a mano desde la pestaña Actions
+
+permissions: {}
+
+jobs:
+  despierta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Llamar a despierta()
+        env:
+          SUPA: https://loarpexzqkwkrctfrxgq.supabase.co
+          # La clave PUBLICABLE, la misma que va dentro de los formularios. Nunca la secreta.
+          KEY: sb_publishable_gq4sOdP2W1BRcsRJ8WOHxA_Vp9fIUKD
+        run: |
+          respuesta=$(curl -sS --fail-with-body --max-time 30 -X POST "$SUPA/rest/v1/rpc/despierta" \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" \
+            -H "Content-Type: application/json" -d '{}')
+          echo "Supabase contesta: $respuesta"
+          test "$respuesta" = '"ok"'

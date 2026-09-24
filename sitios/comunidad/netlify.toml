@@ -1,0 +1,18 @@
+# Sitio: reviondo-comunidad · https://reviondo-comunidad.netlify.app
+# La puerta de entrada a su comunidad. Es pública: su página del retiro enlaza
+# aquí con ?p=modo-avion, ?p=gestalt o ?p=desconexion.
+#
+# En Netlify, al enlazar el repositorio: Base directory = sitios/comunidad.
+# Lo demás lo pone este archivo. Solo se publica public/ (un único index.html).
+# Netlify solo reconstruye este sitio si cambia algo dentro de esta carpeta.
+
+[build]
+  publish = "public"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

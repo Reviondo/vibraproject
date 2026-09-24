@@ -1,0 +1,19 @@
+# Nada de datos de personas en este repositorio: ni exportaciones ni hojas.
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.numbers
+export*/
+exportaciones/
+
+# Netlify y herramientas
+.netlify/
+node_modules/
+.env
+.env.*
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,19 @@
+# Sitio: reviondo-retiro-formulario · https://reviondo-retiro-formulario.netlify.app
+# El formulario de ANTES del retiro. Solo para quien ya ha reservado y pagado:
+# se manda por privado una o dos semanas antes. No se enlaza desde ningún sitio.
+# La edición va en el enlace: ?r=octubre-2026 (por defecto), ?r=mayo-2027…
+#
+# En Netlify, al enlazar el repositorio: Base directory = sitios/retiro-formulario.
+# Solo se publica public/ (un único index.html).
+
+[build]
+  publish = "public"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

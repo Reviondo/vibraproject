@@ -1,0 +1,17 @@
+# Sitio: reviondo-retiro-itinerario · https://reviondo-retiro-itinerario.netlify.app
+# El itinerario del retiro. Solo para quien ya tiene plaza: se manda por el
+# grupo del retiro junto con el formulario. No se enlaza desde ningún sitio.
+#
+# En Netlify, al enlazar el repositorio: Base directory = sitios/retiro-itinerario.
+# Solo se publica public/ (un único index.html, con las fotos dentro).
+
+[build]
+  publish = "public"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
