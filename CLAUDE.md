@@ -6,9 +6,10 @@ Hablas con Sara o con el equipo que la acompaña (VIBRA). En español, de tú,
 en bloques cortos que se lean en el móvil. Sara no es técnica: sin jerga.
 
 Estado a 27/10/2026: los tres sitios están enlazados a este repositorio y
-publicados desde el 24-25/09. Un merge a `main` publica solo los sitios cuya
-carpeta cambia (visto en su Netlify). **El repositorio es público** (visto el
-27/10), aunque más abajo se diga privado: lo que se suba aquí lo ve cualquiera.
+publicados desde el 24-25/09. Hasta el arreglo del 27/10, cualquier push a
+`main` publicaba los tres (ver «Publicar gasta créditos»). **El repositorio es
+público** (visto el 27/10), aunque más abajo se diga privado: lo que se suba
+aquí lo ve cualquiera.
 
 ## Qué hay y dónde va
 
@@ -41,11 +42,48 @@ publica un `.md`, un `.sql` ni nada de `docs/`.
 - Por eso: los cambios se hacen en la rama `cambios` y se acumulan ahí. A `main`
   solo se lleva cuando digan «publica», **en un solo merge**. Nunca se empuja a
   `main` para probar.
-- Un merge a `main` publica solo los sitios cuya carpeta ha cambiado (15 cada
-  uno). Tocar `docs/`, `supabase/`, `panel/` o `.github/` no publica nada.
+- **Hasta el 27/10, cualquier push a `main` publicaba los tres sitios, aunque
+  su carpeta no cambiara** (visto en su Netlify el 27/10: el push de las 07:46,
+  que solo tocaba `CLAUDE.md`, publicó comunidad, itinerario y formulario: 45
+  créditos). Por eso cada `netlify.toml` lleva ahora un `ignore` que solo deja
+  publicar si cambia su carpeta. En formulario e itinerario no cuenta su propio
+  `netlify.toml` (para que meter el `ignore` no los publicara): si solo cambia
+  ese archivo, ese sitio no se publica. Comprobar en la siguiente publicación que los
+  sitios sin cambios salen como «Canceled» y no como publicados. Aun así, a
+  `main` no va nada que no sea para publicar.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
 - El panel no pasa por Netlify: republicarlo no cuesta créditos.
+
+## Varias conversaciones a la vez (desde el 27/10)
+
+Sara abre una conversación de Claude Code por encargo. Los encargos están en su
+Drive: Sara · Reviondo › 05 · Tu Claude › «Fase 2 · paquetes del 27 oct»
+(primero «0 · LÉEME»). Si un documento dice que va en otra conversación o en su
+proyecto de Claude, da igual: va en la conversación donde te lo pegan. Si algo
+no cuadra con su Drive o con este repositorio, manda lo de Sara.
+
+- **Todas trabajan sobre `cambios` a la vez.** Antes de empezar y antes de cada
+  push, trae lo último (`git pull --rebase origin cambios`). Si el push falla
+  porque otra conversación ha subido algo, actualiza y repite. Nunca `--force`.
+- **A `cambios` solo sube lo que Sara ya ha visto y aprobado.** Lo que está a
+  medias se queda en la rama de tu conversación: un merge a `main` publica todo
+  lo que haya en `cambios`, también lo de las demás.
+- **Antes de publicar**, además de qué sitios salen y cuántos créditos cuesta,
+  dile qué hay en `cambios` de otras conversaciones (`git log main..cambios`):
+  sale todo junto.
+- **Lo que depende de qué:**
+  - El QR (documento 9) tiene que estar publicado antes de imprimirlo (30/10).
+  - El panel (4) pone el contador de visitas. La puerta (8) y la página de
+    venta (7) lo usan si ya existe; si no, deja preparado dónde va y dile a Sara
+    que lo pida cuando acabe el panel.
+  - Las páginas de gracias (5) y el correo (6) dependen del enlace de reserva
+    (2), que se hace con el conector de Stripe, fuera de este repositorio.
+- **La página de venta del retiro no está aquí todavía.** Su borrador es un
+  artefacto de Sara (conversación «Web Principal», 24/09) y su sitio,
+  `reviondo-modo-avion`, está en la cuenta de Netlify de VIBRA, con una
+  dirección que ya ha mandado por WhatsApp. Se trae aquí antes de tocarlo; no
+  se crea otro sitio sin hablarlo con ella.
 
 ## La base de datos (Supabase de Sara)
 
