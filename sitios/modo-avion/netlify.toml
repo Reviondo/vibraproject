@@ -1,0 +1,21 @@
+# Sitio: reviondo-modo-avion · https://reviondo-modo-avion.netlify.app
+# Su página de venta del retiro. Es pública: se manda por WhatsApp y por redes.
+#
+# OJO: este sitio está en la cuenta de Netlify de VIBRA, no en la de Sara, y NO
+# está enlazado a este repositorio. Un merge a `main` no lo publica. Para
+# publicarlo hay que subir public/index.html a mano en ese sitio, o pasar el
+# sitio a la cuenta de Sara (la dirección no cambia) y enlazarlo con
+# Base directory = sitios/modo-avion. Lo decide Sara.
+#
+# Solo se publica public/ (un único index.html, con las fotos dentro).
+
+[build]
+  publish = "public"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
