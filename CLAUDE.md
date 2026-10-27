@@ -6,9 +6,10 @@ Hablas con Sara o con el equipo que la acompaña (VIBRA). En español, de tú,
 en bloques cortos que se lean en el móvil. Sara no es técnica: sin jerga.
 
 Estado a 27/10/2026: los tres sitios están enlazados a este repositorio y
-publicados desde el 24-25/09. Un merge a `main` publica solo los sitios cuya
-carpeta cambia (visto en su Netlify). **El repositorio es público** (visto el
-27/10), aunque más abajo se diga privado: lo que se suba aquí lo ve cualquiera.
+publicados desde el 24-25/09. Cualquier push a `main` vuelve a publicar
+comunidad e itinerario (ver «Publicar gasta créditos»). **El repositorio es
+público** (visto el 27/10), aunque más abajo se diga privado: lo que se suba
+aquí lo ve cualquiera.
 
 ## Qué hay y dónde va
 
@@ -41,8 +42,12 @@ publica un `.md`, un `.sql` ni nada de `docs/`.
 - Por eso: los cambios se hacen en la rama `cambios` y se acumulan ahí. A `main`
   solo se lleva cuando digan «publica», **en un solo merge**. Nunca se empuja a
   `main` para probar.
-- Un merge a `main` publica solo los sitios cuya carpeta ha cambiado (15 cada
-  uno). Tocar `docs/`, `supabase/`, `panel/` o `.github/` no publica nada.
+- **Cualquier push a `main` publica `reviondo-comunidad` y
+  `reviondo-retiro-itinerario`, aunque su carpeta no cambie** (visto el 27/10:
+  un push que solo tocaba `CLAUDE.md` los publicó a los dos, 15 créditos cada
+  uno). `reviondo-retiro-formulario` no se publicó. Así que a `main` no va
+  nada que no sea para publicar, ni siquiera documentación, y cada publicación
+  cuesta al menos 30.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
 - El panel no pasa por Netlify: republicarlo no cuesta créditos.
