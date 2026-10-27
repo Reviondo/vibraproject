@@ -335,9 +335,30 @@ footer a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--ru
   }
 
   /* ═══ CONTADOR DE VISITAS (documento 4) ═════════════════════════════════
-     Todavía no existe: lo pone su panel. Cuando esté, se carga aquí y cuenta
-     la visita y cada clic en un [data-boton]. Hasta entonces se mide lo de
-     arriba: quién entra en la comunidad desde aquí, por qué botón y de dónde. */
+     El mismo trocito que en sus otras páginas: avisa a
+     sitios/comunidad/netlify/functions/visita.mjs de la visita, con su ?c=, su ?p=
+     y de qué web viene. Sin cookies ni IP. Los clics en un [data-boton] no hace
+     falta contarlos aquí: llegan a su formulario con ?c=puerta y su ?p=, y el
+     contador de allí los cuenta como visitas desde la puerta.
+     Sara no cuenta: abre una vez esta página con #no-me-cuentes al final. */
+  (function(){
+    try{
+      if(location.hash==='#no-me-cuentes'){
+        localStorage.setItem('reviondo-no-contar','1');
+        history.replaceState(null,'',location.pathname+location.search);
+        alert('Hecho: desde este navegador ya no cuentan tus visitas a esta página.');
+      }
+      if(localStorage.getItem('reviondo-no-contar')) return;
+    }catch(e){}
+    if(navigator.webdriver) return;
+    var r='';
+    try{ r=document.referrer?new URL(document.referrer).hostname:''; }catch(e){}
+    try{
+      fetch('https://reviondo-comunidad.netlify.app/api/visita',{method:'POST',keepalive:true,
+        headers:{'Content-Type':'text/plain'},
+        body:JSON.stringify({c:Q.get('c')||'',p:Q.get('p')||'',r:r})}).catch(function(){});
+    }catch(e){}
+  })();
 
   /* ═══ LAS DOS TIRAS: flechas en ordenador, y los testimonios pasan solos ═ */
   function paso(tira){

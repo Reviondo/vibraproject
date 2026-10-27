@@ -23,8 +23,10 @@ aquí lo ve cualquiera.
 | `sitios/retiro-itinerario/` | https://reviondo-retiro-itinerario.netlify.app | El itinerario del retiro. Solo para quien ya tiene plaza. Sin precio ni venta |
 | `sitios/modo-avion/` | ¿https://reviondo-modo-avion.netlify.app? (por confirmar) | La página de venta del retiro que toca vender ahora: hoy, el de febrero de 2027. **No es su web principal.** Pública. El sitio está en la cuenta de Netlify de VIBRA y **no está enlazado**: un merge a `main` no la publica. Vista previa: https://claude.ai/artifact/WhD5XTvGs2RNHZCBCBLuN5 |
 | `sitios/puerta/` | Aún no existe (prevista https://reviondo.netlify.app, si está libre) | Su página principal, la «puerta» (documento 8, 27/10): el único enlace de su biografía, con eventos, retiros y programa Modo Avión a la vista. Pública. **No hay sitio en Netlify todavía**: un merge a `main` no la publica. Vista previa: https://claude.ai/artifact/Uq4pbXjtctHT9SBVADkS8c |
-| `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su panel: quién ha rellenado qué. Solo lectura |
-| `supabase/migrations/` | proyecto `loarpexzqkwkrctfrxgq` | 004 comunidad · 005 retiro · 006 despierta. Las tres están aplicadas |
+| `panel/panel.html` | https://claude.ai/artifact/5XZTAvvNu5UmEHroyT4tx5 | **Su panel de Reviondo** (documento 4, 27/10): el camino de su gente en directo, de su Supabase y su Stripe. Solo lectura. Ver «El panel» |
+| `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su buzón: quién ha rellenado qué, con todas las respuestas. Solo lectura. Sigue como estaba |
+| `sitios/comunidad/netlify/functions/visita.mjs` | …/api/visita | El contador de visitas de todas sus páginas (27/10). Ver «El contador de visitas» |
+| `supabase/migrations/` | proyecto `loarpexzqkwkrctfrxgq` | 004 comunidad · 005 retiro · 006 despierta · 007 visitas. Las cuatro están aplicadas |
 | `.github/workflows/` | pestaña Actions | Toca la base 3 veces al día para que no se pause |
 | `docs/instrucciones-23-sep/` | — | Por qué cada página es como es. Manda este archivo |
 
@@ -61,7 +63,8 @@ cargue solo cuando se ve. Nunca se publica un `.md`, un `.sql` ni nada de `docs/
   `main` no va nada que no sea para publicar.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
-- El panel no pasa por Netlify: republicarlo no cuesta créditos.
+- Sus dos paneles (buzón y panel) no pasan por Netlify: republicarlos no cuesta
+  créditos.
 
 ## Varias conversaciones a la vez (desde el 27/10)
 
@@ -82,9 +85,9 @@ no cuadra con su Drive o con este repositorio, manda lo de Sara.
   sale todo junto.
 - **Lo que depende de qué:**
   - El QR (documento 9) tiene que estar publicado antes de imprimirlo (30/10).
-  - El panel (4) pone el contador de visitas. La puerta (8) y la página de
-    venta (7) lo usan si ya existe; si no, deja preparado dónde va y dile a Sara
-    que lo pida cuando acabe el panel.
+  - El contador de visitas (4) ya existe (27/10) y está en la puerta, la venta,
+    comunidad y formulario. Una página nueva que quiera contar: ver «El contador
+    de visitas».
   - Las páginas de gracias (5) y el correo (6) dependen del enlace de reserva
     (2), que se hace con el conector de Stripe, fuera de este repositorio.
 - **La página de venta del retiro** (`sitios/modo-avion/`, desde el 27/10) es
@@ -188,13 +191,61 @@ no cuadra con su Drive o con este repositorio, manda lo de Sara.
 
 ## El panel
 
-- `panel/buzon.html` es el artefacto https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a,
-  en la cuenta de Sara. Para cambiarlo: editar el archivo y publicarlo con la
-  herramienta Artifact **pasando esa url**, nunca como uno nuevo.
-- Lee en directo con el conector de Supabase de quien lo abre (`execute_sql`,
-  solo `select`). No guarda ni una respuesta dentro. Solo lo puede abrir ella.
-- Si se añade un formulario nuevo: su tabla, su función de entrada, y una
-  pestaña más en el panel.
+Tiene dos, los dos en su cuenta de Claude, solo los puede abrir ella, y no
+guardan ni una respuesta ni un pago dentro: leen en directo con los conectores
+de quien los abre. Para cambiar cualquiera: editar el archivo y publicarlo con
+la herramienta Artifact **pasando su url**, nunca como uno nuevo.
+
+- **`panel/panel.html`**, su panel de Reviondo (documento 4, 27/10):
+  https://claude.ai/artifact/5XZTAvvNu5UmEHroyT4tx5. Lo pidió **en Claude, no en
+  Netlify** («un enlace que corre en directo»): por eso no hay llave `?t=`, ni
+  función de Netlify que lea su base, ni clave de Stripe en ningún sitio.
+  Lee su Supabase (`execute_sql`, solo `select`, solo las columnas que enseña)
+  y su Stripe (`stripe_api_read`: `GetCheckoutSessions` y `GetPaymentLinks`,
+  cuenta `acct_1UURpH9zz9XRvFad`, en real). Va en el orden que pidió ella, el
+  camino de su gente: llegan (visitas) → entran (comunidad) → reservan (pagos)
+  → lo cobrado este mes → su retiro de febrero (plazas de 9; las 3 primeras
+  señales, a 435 €; el resto, a 485 €) → todas sus personas. Arriba, «hoy ·
+  esta semana · 30 días». No quiso objetivo de ingresos al lado (27/10).
+- Cada persona sale una vez: se juntan por correo o teléfono sus filas de
+  comunidad, formulario del retiro y pagos. Lo que le interesa: lo que pagó; si
+  no, lo que marcó en «¿Qué te gustaría encontrar?» (retiros → retiro, planes
+  para parar → evento, conocerme mejor → programa) o el `?p=` con el que entró
+  (evento, retiro, programa, desde su puerta). Lo eligió ella.
+- Su siguiente paso y el mensaje de WhatsApp los decide `siguientePaso()`:
+  pagó la señal sin formulario → mandárselo; vino a otra edición → contarle la
+  de ahora; le interesa retiro, evento o programa → contárselo; acaba de entrar
+  → saludarle. Los mensajes los propuso Claude: si Sara cambia uno, se cambia ahí.
+- Cada edición nueva del retiro: `CONFIG.retiro` (clave, fechas, plazas,
+  precios, enlace del formulario). Los pagos se reconocen por el `metadata` del
+  enlace de pago (`retiro: febrero-2027`); un evento, por `tipo: evento` o por
+  «evento» en su descripción. Quien haga enlaces de pago, que siga igual.
+- **`panel/buzon.html`**, su buzón: https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a.
+  Todas las respuestas de los formularios, tal cual. Si se añade un formulario
+  nuevo: su tabla, su función de entrada, y una pestaña más en el buzón.
+
+## El contador de visitas
+
+- Cada página lleva al final un trocito («Contador de visitas») que avisa a
+  `sitios/comunidad/netlify/functions/visita.mjs`. Esa función es la única que
+  apunta visitas (`visita_contar()`, migración 007) con la llave del contador.
+- Se guarda la página, el día, el `?c=` y el `?p=`, de qué web viene y el aparato.
+  Ni hora, ni IP, ni navegador, ni cookies. No cuentan robots, vistas previas ni
+  direcciones que no estén en `PAGINAS` de la función.
+- **La llave**: está en el Vault de Supabase (`contador_llave`), creada allí sin
+  que nadie la viera, y su copia tiene que estar en las variables de Netlify de
+  `reviondo-comunidad` como `CONTADOR_LLAVE`. La copia la pone Sara a mano (27/10:
+  el paso a paso se lo dio su conversación del panel). **Nunca** se escribe en un
+  archivo ni en una conversación. Sin ella, la función no cuenta nada (lo dice
+  en sus registros) y las páginas siguen igual.
+- Sara no cuenta: abre una vez cada página con `#no-me-cuentes` al final (los
+  enlaces están en su panel, en «Que no te cuente a ti»).
+- Una página nueva: su dirección en `PAGINAS` de la función (y en
+  `CONFIG.paginas` del panel) y el trocito al final. Ojo: la puerta va con
+  https://reviondo.netlify.app y la venta con https://reviondo-modo-avion.netlify.app;
+  si al crearlas la dirección es otra, se cambia ahí o no cuentan.
+- El itinerario **todavía no lo lleva**: se le pone cuando se actualice para
+  febrero, para no publicarlo solo por esto (15 créditos).
 
 ## Cómo trabajar
 

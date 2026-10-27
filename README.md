@@ -9,7 +9,8 @@ están en `CLAUDE.md`; esto es lo mínimo para ponerlo en marcha.
 | Formulario de antes del retiro | https://reviondo-retiro-formulario.netlify.app | `sitios/retiro-formulario` |
 | Itinerario del retiro | https://reviondo-retiro-itinerario.netlify.app | `sitios/retiro-itinerario` |
 | Página de venta del retiro de ahora, febrero (en la cuenta de VIBRA, sin enlazar) | por confirmar | `sitios/modo-avion` |
-| Su panel (en Claude) | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | `panel/buzon.html` |
+| Su panel de Reviondo (en Claude) | https://claude.ai/artifact/5XZTAvvNu5UmEHroyT4tx5 | `panel/panel.html` |
+| Su buzón (en Claude) | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | `panel/buzon.html` |
 
 Lo que rellena la gente cae en **su** Supabase (organización Reviondo,
 proyecto `loarpexzqkwkrctfrxgq`), y lo ve en su panel. Nada de eso pasa por aquí.

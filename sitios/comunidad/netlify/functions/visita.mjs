@@ -21,6 +21,7 @@ const PAGINAS = {
   'https://reviondo-retiro-formulario.netlify.app': 'retiro-formulario',
   'https://reviondo-retiro-itinerario.netlify.app': 'retiro-itinerario',
   'https://reviondo-modo-avion.netlify.app': 'venta',
+  'https://reviondo.netlify.app': 'puerta', // la dirección prevista de su puerta (documento 8)
 }
 
 const ROBOT = /bot|crawl|spider|slurp|preview|facebookexternalhit|whatsapp|telegram|discord|skype|headless|lighthouse|pagespeed|python|curl|wget|okhttp|httpclient|java\//i

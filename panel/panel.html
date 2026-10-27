@@ -239,11 +239,12 @@ ul.limpia{list-style:none;margin:0;padding:0}
       formulario: 'https://reviondo-retiro-formulario.netlify.app/?r=febrero-2027'
     },
     venta: 'https://reviondo-modo-avion.netlify.app',
-    paginas: { 'comunidad': 'Formulario de entrada', 'retiro-formulario': 'Formulario de antes del retiro', 'retiro-itinerario': 'Itinerario', 'venta': 'Página de venta' },
+    paginas: { 'puerta': 'Tu puerta', 'comunidad': 'Formulario de entrada', 'retiro-formulario': 'Formulario de antes del retiro', 'retiro-itinerario': 'Itinerario', 'venta': 'Página de venta' },
     noContar: [
       ['Formulario de entrada', 'https://reviondo-comunidad.netlify.app/#no-me-cuentes'],
       ['Formulario de antes del retiro', 'https://reviondo-retiro-formulario.netlify.app/#no-me-cuentes'],
-      ['Página de venta', 'https://reviondo-modo-avion.netlify.app/#no-me-cuentes']
+      ['Página de venta', 'https://reviondo-modo-avion.netlify.app/#no-me-cuentes'],
+      ['Tu puerta', 'https://reviondo.netlify.app/#no-me-cuentes']
     ]
   };
 
@@ -304,11 +305,14 @@ ul.limpia{list-style:none;margin:0;padding:0}
       return r;
     }
     function params(url){
-      try { var u = new URL(url); return { c: (u.searchParams.get('c') || '').toLowerCase(), p: (u.searchParams.get('p') || '').toLowerCase() }; }
-      catch (e) { return { c: '', p: '' }; }
+      try { var u = new URL(url); return { c: (u.searchParams.get('c') || '').toLowerCase(), p: (u.searchParams.get('p') || '').toLowerCase(), b: (u.searchParams.get('b') || '').toLowerCase() }; }
+      catch (e) { return { c: '', p: '', b: '' }; }
     }
     var PUERTAS = { 'modo-avion': 'Puerta «Necesito parar»', 'gestalt': 'Puerta «Quiero conocerme mejor»', 'desconexion': 'Puerta «El móvil me come el día»' };
+    // Su puerta (documento 8) manda a su formulario con ?c=puerta y ?p= lo que le interesa.
+    var DE_LA_PUERTA = { 'evento': 'eventos', 'retiro': 'retiros', 'programa': 'programa' };
     function nombreEnlace(c, p){
+      if (c === 'puerta') return 'Tu puerta' + (DE_LA_PUERTA[p] ? ' · ' + DE_LA_PUERTA[p] : '');
       if (c === 'bio') return 'Tu bio de Instagram';
       if (c === 'qr') return 'Tu QR';
       if (c.indexOf('qr-') === 0) return 'Tu QR · ' + c.slice(3);
@@ -320,10 +324,11 @@ ul.limpia{list-style:none;margin:0;padding:0}
       return '';
     }
     var ORIGENES = { instagram: 'Instagram', whatsapp: 'WhatsApp', google: 'Google', facebook: 'Facebook', tiktok: 'TikTok', linktree: 'Linktree', directo: 'Directo, sin web de origen' };
+    var DESDE_SUS_PAGINAS = { 'puerta': 'Desde tu puerta', 'comunidad': 'Desde tu formulario de entrada', 'retiro-formulario': 'Desde tu formulario de antes del retiro', 'retiro-itinerario': 'Desde tu itinerario', 'venta': 'Desde tu página de venta' };
     function nombreOrigen(o){
       if (!o) return 'Sin dato';
       if (ORIGENES[o]) return ORIGENES[o];
-      if (CONFIG.paginas[o]) return 'Desde tu ' + CONFIG.paginas[o].charAt(0).toLowerCase() + CONFIG.paginas[o].slice(1);
+      if (DESDE_SUS_PAGINAS[o]) return DESDE_SUS_PAGINAS[o];
       return o;
     }
     // Lo que marcó en «¿Qué te gustaría encontrar?», en las tres cosas que vende.
@@ -415,7 +420,8 @@ ul.limpia{list-style:none;margin:0;padding:0}
           m.busca.forEach(function(v){ if (p.busca.indexOf(v) < 0) p.busca.push(v); if (BUSCA[v]) p.intereses[BUSCA[v]] = 'marcó'; });
           if (m.sobre) p.sobre = m.sobre;
           var pr = params(n.r.origen), pal = limpio(n.r.palanca).toLowerCase();
-          if (pal.indexOf('retiro') === 0 || pr.p.indexOf('retiro') === 0) p.intereses.retiro = p.intereses.retiro || 'marcó';
+          // Lo que pulsó en su puerta: ?p=evento, ?p=retiro o ?p=programa (y antes, ?p=retiro-octubre).
+          ['evento', 'retiro', 'programa'].forEach(function(t){ if (pal.indexOf(t) === 0 || pr.p.indexOf(t) === 0) p.intereses[t] = p.intereses[t] || 'marcó'; });
           if (!p.deDonde) p.deDonde = nombreEnlace(pr.c, pr.p || pal) || 'Enlace directo a tu formulario';
         });
         pag.forEach(function(x){ if (x.importe > 0 && x.tipo !== 'otro') p.intereses[x.tipo] = 'pagó'; });
