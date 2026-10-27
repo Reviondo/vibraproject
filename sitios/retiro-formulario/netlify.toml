@@ -1,10 +1,14 @@
 # Sitio: reviondo-retiro-formulario · https://reviondo-retiro-formulario.netlify.app
 # El formulario de ANTES del retiro. Solo para quien ya ha reservado y pagado:
 # se manda por privado una o dos semanas antes. No se enlaza desde ningún sitio.
-# La edición va en el enlace: ?r=octubre-2026 (por defecto), ?r=mayo-2027…
+# La edición va en el enlace: ?r=febrero-2027 (por defecto desde el 27/10)…
+#
+# Aquí viven también las dos páginas de gracias (27/10), que es adonde lleva el
+# enlace de pago al pagar: /gracias/ (señal del retiro) y /gracias-evento/.
+# Tampoco se enlazan desde ningún sitio; el noindex de abajo las cubre.
 #
 # En Netlify, al enlazar el repositorio: Base directory = sitios/retiro-formulario.
-# Solo se publica public/ (un único index.html).
+# Solo se publica public/ (index.html, gracias/ y gracias-evento/).
 
 [build]
   publish = "public"
