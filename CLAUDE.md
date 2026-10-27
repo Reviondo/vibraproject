@@ -21,7 +21,7 @@ aquí lo ve cualquiera.
 | `sitios/retiro-formulario/public/gracias/` | …/gracias/ | Gracias al pagar la señal del retiro (27/10). Botón al formulario con `?r=febrero-2027`. Su grupo llega en el enlace de pago (`?grupo=`), nunca en el archivo |
 | `sitios/retiro-formulario/public/gracias-evento/` | …/gracias-evento/ | Gracias al pagar un evento (27/10). Día, hora, sitio, mapa y grupo llegan en el enlace de pago de cada evento (`?dia=&hora=&lugar=&mapa=&grupo=`): un evento nuevo no se publica |
 | `sitios/retiro-itinerario/` | https://reviondo-retiro-itinerario.netlify.app | El itinerario del retiro. Solo para quien ya tiene plaza. Sin precio ni venta |
-| `sitios/modo-avion/` | https://reviondo-modo-avion.netlify.app | Su página de venta del retiro (27/10). Pública. El sitio está en la cuenta de Netlify de VIBRA y **no está enlazado**: un merge a `main` no la publica. Vista previa: su artefacto https://claude.ai/artifact/C5D7tYs7kHWz41ULbFPyAV |
+| `sitios/modo-avion/` | ¿https://reviondo-modo-avion.netlify.app? (por confirmar) | La página de venta del retiro que toca vender ahora: hoy, el de febrero de 2027. **No es su web principal.** Pública. El sitio está en la cuenta de Netlify de VIBRA y **no está enlazado**: un merge a `main` no la publica. Vista previa: https://claude.ai/artifact/WhD5XTvGs2RNHZCBCBLuN5 |
 | `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su panel: quién ha rellenado qué. Solo lectura |
 | `supabase/migrations/` | proyecto `loarpexzqkwkrctfrxgq` | 004 comunidad · 005 retiro · 006 despierta. Las tres están aplicadas |
 | `.github/workflows/` | pestaña Actions | Toca la base 3 veces al día para que no se pause |
@@ -84,13 +84,16 @@ no cuadra con su Drive o con este repositorio, manda lo de Sara.
     que lo pida cuando acabe el panel.
   - Las páginas de gracias (5) y el correo (6) dependen del enlace de reserva
     (2), que se hace con el conector de Stripe, fuera de este repositorio.
-- **La página de venta del retiro ya está aquí** (`sitios/modo-avion/`, desde
-  el 27/10), traída de su artefacto de la conversación «Web Principal». Su
-  sitio, `reviondo-modo-avion`, sigue en la cuenta de Netlify de VIBRA, sin
-  enlazar, con una dirección que ya ha mandado por WhatsApp: no se crea otro
-  sitio sin hablarlo con ella. Para enseñársela se republica su artefacto, con
-  la misma url: no gasta créditos. Los huecos marcados «FALTA» se rellenan con
-  lo que diga ella antes de publicarla.
+- **La página de venta del retiro** (`sitios/modo-avion/`, desde el 27/10) es
+  una página solo para el retiro que toca vender ahora, no su web principal.
+  Su web principal es otra cosa: el artefacto de la conversación «Web
+  Principal» (https://claude.ai/artifact/C5D7tYs7kHWz41ULbFPyAV, que no se toca
+  desde aquí) y la puerta del documento 8. El sitio `reviondo-modo-avion` sigue
+  en la cuenta de Netlify de VIBRA, sin enlazar, con una dirección que ya ha
+  mandado por WhatsApp: no se crea otro sitio sin hablarlo con ella. Para
+  enseñarle la página se republica su vista previa
+  (https://claude.ai/artifact/WhD5XTvGs2RNHZCBCBLuN5): no gasta créditos. Los
+  huecos marcados «FALTA» se rellenan con lo que diga ella antes de publicarla.
 
 ## La base de datos (Supabase de Sara)
 
