@@ -8,6 +8,12 @@
 
 [build]
   publish = "public"
+  # Solo se publica si cambia algo dentro de esta carpeta. Sin esto, el
+  # 27/10 un push a main que solo tocaba CLAUDE.md publicó los tres sitios
+  # (15 créditos cada uno). Sale 0 = sin cambios = Netlify no publica.
+  # No cuenta este archivo, para que meter esta línea no lo publicara:
+  # si solo cambias este archivo, este sitio NO se publica.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)netlify.toml'"
 
 [[headers]]
   for = "/*"

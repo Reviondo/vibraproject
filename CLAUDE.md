@@ -6,8 +6,8 @@ Hablas con Sara o con el equipo que la acompaña (VIBRA). En español, de tú,
 en bloques cortos que se lean en el móvil. Sara no es técnica: sin jerga.
 
 Estado a 27/10/2026: los tres sitios están enlazados a este repositorio y
-publicados desde el 24-25/09. Cualquier push a `main` vuelve a publicar
-comunidad e itinerario (ver «Publicar gasta créditos»). **El repositorio es
+publicados desde el 24-25/09. Hasta el arreglo del 27/10, cualquier push a
+`main` publicaba los tres (ver «Publicar gasta créditos»). **El repositorio es
 público** (visto el 27/10), aunque más abajo se diga privado: lo que se suba
 aquí lo ve cualquiera.
 
@@ -42,12 +42,15 @@ publica un `.md`, un `.sql` ni nada de `docs/`.
 - Por eso: los cambios se hacen en la rama `cambios` y se acumulan ahí. A `main`
   solo se lleva cuando digan «publica», **en un solo merge**. Nunca se empuja a
   `main` para probar.
-- **Cualquier push a `main` publica `reviondo-comunidad` y
-  `reviondo-retiro-itinerario`, aunque su carpeta no cambie** (visto el 27/10:
-  un push que solo tocaba `CLAUDE.md` los publicó a los dos, 15 créditos cada
-  uno). `reviondo-retiro-formulario` no se publicó. Así que a `main` no va
-  nada que no sea para publicar, ni siquiera documentación, y cada publicación
-  cuesta al menos 30.
+- **Hasta el 27/10, cualquier push a `main` publicaba los tres sitios, aunque
+  su carpeta no cambiara** (visto en su Netlify el 27/10: el push de las 07:46,
+  que solo tocaba `CLAUDE.md`, publicó comunidad, itinerario y formulario: 45
+  créditos). Por eso cada `netlify.toml` lleva ahora un `ignore` que solo deja
+  publicar si cambia su carpeta. En formulario e itinerario no cuenta su propio
+  `netlify.toml` (para que meter el `ignore` no los publicara): si solo cambia
+  ese archivo, ese sitio no se publica. Comprobar en la siguiente publicación que los
+  sitios sin cambios salen como «Canceled» y no como publicados. Aun así, a
+  `main` no va nada que no sea para publicar.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
 - El panel no pasa por Netlify: republicarlo no cuesta créditos.
