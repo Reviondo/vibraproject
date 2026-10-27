@@ -431,5 +431,30 @@ footer a:hover{color:var(--coral);border-color:var(--coral)}
   }
 })();
 </script>
+<!-- Contador de visitas (documento 4). Sin cookies y sin guardar la IP de nadie:
+     avisa a sitios/comunidad/netlify/functions/visita.mjs de que alguien ha abierto
+     esta página, con el ?c= y el ?p= del enlace y de qué web viene. Nada más.
+     Sara no cuenta: abriendo una vez esta página con #no-me-cuentes al final de la
+     dirección, ese navegador deja de contar aquí. -->
+<script>
+(function(){
+  try{
+    if(location.hash==='#no-me-cuentes'){
+      localStorage.setItem('reviondo-no-contar','1');
+      history.replaceState(null,'',location.pathname+location.search);
+      alert('Hecho: desde este navegador ya no cuentan tus visitas a esta página.');
+    }
+    if(localStorage.getItem('reviondo-no-contar')) return;
+  }catch(e){}
+  if(navigator.webdriver) return;
+  var q=new URLSearchParams(location.search), r='';
+  try{ r=document.referrer?new URL(document.referrer).hostname:''; }catch(e){}
+  try{
+    fetch('https://reviondo-comunidad.netlify.app/api/visita',{method:'POST',keepalive:true,
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({c:q.get('c')||'',p:q.get('p')||'',r:r})}).catch(function(){});
+  }catch(e){}
+})();
+</script>
 </body>
 </html>

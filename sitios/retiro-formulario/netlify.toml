@@ -17,7 +17,9 @@
   # (15 créditos cada uno). Sale 0 = sin cambios = Netlify no publica.
   # No cuenta este archivo, para que meter esta línea no lo publicara:
   # si solo cambias este archivo, este sitio NO se publica.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)netlify.toml'"
+  # Sin caché, Netlify da CACHED_COMMIT_REF = COMMIT_REF y el git diff saldría
+  # vacío aunque haya cambios: el test de delante hace que entonces SÍ publique.
+  ignore = "test \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':(exclude)netlify.toml'"
 
 [[headers]]
   for = "/*"
