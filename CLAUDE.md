@@ -55,8 +55,9 @@ cargue solo cuando se ve. Nunca se publica un `.md`, un `.sql` ni nada de `docs/
   créditos). Por eso cada `netlify.toml` lleva ahora un `ignore` que solo deja
   publicar si cambia su carpeta. En formulario e itinerario no cuenta su propio
   `netlify.toml` (para que meter el `ignore` no los publicara): si solo cambia
-  ese archivo, ese sitio no se publica. Comprobar en la siguiente publicación que los
-  sitios sin cambios salen como «Canceled» y no como publicados. Aun así, a
+  ese archivo, ese sitio no se publica. Comprobado el 27/10 a las 12:09: el push
+  1b52927 (solo el QR) publicó comunidad y nada más; formulario e itinerario
+  siguieron con su publicación de las 07:46. Aun así, a
   `main` no va nada que no sea para publicar.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
