@@ -366,7 +366,7 @@ footer p{font-size:12.5px;color:var(--soft);line-height:1.75}
   // La edición. Así el mismo archivo vale para octubre y para el siguiente:
   // se le cambia el valor, o se le pasa ?r=mayo-2027 en el enlace.
   var Q=new URLSearchParams(location.search);
-  var RETIRO=(Q.get('r')||'octubre-2026').slice(0,60);
+  var RETIRO=(Q.get('r')||'febrero-2027').slice(0,60);   // 27/10: octubre ya pasó; lo que entre sin ?r= es de febrero
 
   var f=document.getElementById('f');
   var pasos=[].slice.call(document.querySelectorAll('.paso'));

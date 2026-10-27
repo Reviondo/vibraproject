@@ -7,7 +7,7 @@ en bloques cortos que se lean en el móvil. Sara no es técnica: sin jerga.
 
 Estado a 27/10/2026: los tres sitios están enlazados a este repositorio y
 publicados desde el 24-25/09. Cualquier push a `main` vuelve a publicar
-comunidad e itinerario (ver «Publicar gasta créditos»). **El repositorio es
+los tres sitios (ver «Publicar gasta créditos»). **El repositorio es
 público** (visto el 27/10), aunque más abajo se diga privado: lo que se suba
 aquí lo ve cualquiera.
 
@@ -17,7 +17,9 @@ aquí lo ve cualquiera.
 |---|---|---|
 | `sitios/comunidad/` | https://reviondo-comunidad.netlify.app | La puerta de entrada a su comunidad de WhatsApp. Pública. Su página del retiro enlaza aquí con `?p=modo-avion`, `?p=gestalt` o `?p=desconexion` |
 | `sitios/comunidad/netlify.toml` | `…/qr` y `…/qr/<lugar>` | Su QR impreso (27/10). Hoy lleva a su Instagram (lo pidió ella); para contar por lugar, a `?c=qr` o `?c=qr-<lugar>`. El QR no cambia nunca: se cambia el `to` |
-| `sitios/retiro-formulario/` | https://reviondo-retiro-formulario.netlify.app | El formulario de ANTES del retiro. Solo para quien ya ha pagado, por privado. La edición va en `?r=` (por defecto `octubre-2026`) |
+| `sitios/retiro-formulario/` | https://reviondo-retiro-formulario.netlify.app | El formulario de ANTES del retiro. Solo para quien ya ha pagado, por privado. La edición va en `?r=` (por defecto `febrero-2027` desde el 27/10) |
+| `sitios/retiro-formulario/public/gracias/` | …/gracias/ | Gracias al pagar la señal del retiro (27/10). Botón al formulario con `?r=febrero-2027`. Su grupo llega en el enlace de pago (`?grupo=`), nunca en el archivo |
+| `sitios/retiro-formulario/public/gracias-evento/` | …/gracias-evento/ | Gracias al pagar un evento (27/10). Día, hora, sitio, mapa y grupo llegan en el enlace de pago de cada evento (`?dia=&hora=&lugar=&mapa=&grupo=`): un evento nuevo no se publica |
 | `sitios/retiro-itinerario/` | https://reviondo-retiro-itinerario.netlify.app | El itinerario del retiro. Solo para quien ya tiene plaza. Sin precio ni venta |
 | `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su panel: quién ha rellenado qué. Solo lectura |
 | `supabase/migrations/` | proyecto `loarpexzqkwkrctfrxgq` | 004 comunidad · 005 retiro · 006 despierta. Las tres están aplicadas |
@@ -31,8 +33,10 @@ Sitios de Netlify, en su cuenta (equipo `reviondo-r`, plan gratis):
 Producción es pública; las vistas previas piden entrar con la cuenta del equipo.
 **Las direcciones no se cambian**: ya están en botones y en mensajes.
 
-Cada sitio publica solo su `public/`, que es un único `index.html`. Nunca se
-publica un `.md`, un `.sql` ni nada de `docs/`.
+Cada sitio publica solo su `public/`: un `index.html` (y en el del formulario,
+también `gracias/` y `gracias-evento/`, que llevan el `noindex` del sitio y no se
+enlazan desde nada: se llega pagando). Nunca se publica un `.md`, un `.sql` ni
+nada de `docs/`.
 
 ## Publicar gasta créditos: los cambios se agrupan
 
@@ -42,12 +46,11 @@ publica un `.md`, un `.sql` ni nada de `docs/`.
 - Por eso: los cambios se hacen en la rama `cambios` y se acumulan ahí. A `main`
   solo se lleva cuando digan «publica», **en un solo merge**. Nunca se empuja a
   `main` para probar.
-- **Cualquier push a `main` publica `reviondo-comunidad` y
-  `reviondo-retiro-itinerario`, aunque su carpeta no cambie** (visto el 27/10:
-  un push que solo tocaba `CLAUDE.md` los publicó a los dos, 15 créditos cada
-  uno). `reviondo-retiro-formulario` no se publicó. Así que a `main` no va
-  nada que no sea para publicar, ni siquiera documentación, y cada publicación
-  cuesta al menos 30.
+- **Cualquier push a `main` publica los tres sitios, aunque su carpeta no
+  cambie: 45 créditos** (visto en su Netlify el 27/10: el push 2e5563d, que solo
+  tocaba `CLAUDE.md`, dejó en producción comunidad a las 07:46:24, itinerario a
+  las 07:46:33 y formulario a las 07:46:44). Así que a `main` no va nada que no
+  sea para publicar, ni siquiera documentación.
 - Antes de publicar, dilo en una línea: qué sitios salen y cuántos créditos
   cuesta. Las vistas previas de ramas y de pull requests no gastan créditos.
 - El panel no pasa por Netlify: republicarlo no cuesta créditos.

@@ -35,6 +35,6 @@ proyecto `loarpexzqkwkrctfrxgq`), y lo ve en su panel. Nada de eso pasa por aqu�
 ## Publicar cambios después
 
 Los cambios se acumulan en la rama `cambios`. Cuando haya que publicar, un solo
-merge a `main`: se publica cada sitio que haya cambiado, una vez (15 créditos
-cada uno). El plan gratis da 300 al mes; si se acaban, Netlify apaga los tres
-sitios. Más detalle en `CLAUDE.md`.
+merge a `main`. Hoy (27/10) cualquier push a `main` publica los tres sitios,
+hayan cambiado o no: 3 × 15 = 45 créditos. El plan gratis da 300 al mes; si se
+acaban, Netlify apaga los tres sitios. Más detalle en `CLAUDE.md`.
