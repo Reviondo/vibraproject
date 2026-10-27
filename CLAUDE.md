@@ -15,7 +15,7 @@ carpeta cambia (visto en su Netlify). **El repositorio es público** (visto el
 | Carpeta | Dónde se ve | Para qué |
 |---|---|---|
 | `sitios/comunidad/` | https://reviondo-comunidad.netlify.app | La puerta de entrada a su comunidad de WhatsApp. Pública. Su página del retiro enlaza aquí con `?p=modo-avion`, `?p=gestalt` o `?p=desconexion` |
-| `sitios/comunidad/netlify.toml` | `…/qr` y `…/qr/<lugar>` | Su QR impreso (27/10). Redirige a `?c=qr` o `?c=qr-<lugar>`. El QR no cambia nunca: se cambia el `to` |
+| `sitios/comunidad/netlify.toml` | `…/qr` y `…/qr/<lugar>` | Su QR impreso (27/10). Hoy lleva a su Instagram (lo pidió ella); para contar por lugar, a `?c=qr` o `?c=qr-<lugar>`. El QR no cambia nunca: se cambia el `to` |
 | `sitios/retiro-formulario/` | https://reviondo-retiro-formulario.netlify.app | El formulario de ANTES del retiro. Solo para quien ya ha pagado, por privado. La edición va en `?r=` (por defecto `octubre-2026`) |
 | `sitios/retiro-itinerario/` | https://reviondo-retiro-itinerario.netlify.app | El itinerario del retiro. Solo para quien ya tiene plaza. Sin precio ni venta |
 | `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su panel: quién ha rellenado qué. Solo lectura |
