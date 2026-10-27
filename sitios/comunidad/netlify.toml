@@ -22,23 +22,14 @@
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 # ── Su QR (27/10) ───────────────────────────────────────────────────────────
-# El QR impreso dice siempre reviondo-comunidad.netlify.app/qr (o /qr/<lugar>)
-# y no cambia nunca. Lo que cambia es adónde lleva: la línea `to`.
-#   /qr          → lo de siempre: su móvil, clases, eventos
-#   /qr/<lugar>  → un QR por lugar (/qr/flowfest). Vale cualquier nombre: un
-#                  lugar nuevo no hay que publicarlo, basta imprimir su QR.
-# Desde el 27/10 los dos llevan a su Instagram (lo pidió ella). Instagram no
-# dice desde qué QR llega cada persona. Para contarlo en su panel, el `to`
-# vuelve a su formulario: "/?c=qr" y "/?c=qr-:lugar" (el formulario guarda la
-# dirección entera en `origen`). El día de su puerta, su dirección con ese ?c=.
+# Un solo QR y un solo enlace: reviondo-comunidad.netlify.app/qr. El QR impreso
+# no cambia nunca; lo que cambia es adónde lleva: la línea `to` (y publicar).
+# Desde el 27/10 lleva a su Instagram (lo pidió ella). Para que su panel cuente
+# a quien llega por el QR, el `to` sería "/?c=qr": el formulario guarda la
+# dirección entera en `origen`. El día de su puerta, su dirección con ?c=qr.
 # 302 y no 301: un 301 se queda guardado en el móvil de quien ya lo escaneó, y
 # luego cambiar el destino no le llegaría.
 [[redirects]]
   from = "/qr"
-  to = "https://www.instagram.com/reviondo.r/"
-  status = 302
-
-[[redirects]]
-  from = "/qr/:lugar"
   to = "https://www.instagram.com/reviondo.r/"
   status = 302
