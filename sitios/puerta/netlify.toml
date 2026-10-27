@@ -1,0 +1,25 @@
+# Sitio: la puerta de Reviondo · su página principal (documento 8, 27/10)
+# El único enlace de su biografía: arriba lo que vende ahora, debajo el resto.
+# Dirección prevista: https://reviondo.netlify.app (si está libre al crearlo).
+#
+# TODAVÍA NO EXISTE EN NETLIFY. Hasta que se cree el sitio y se enlace a esta
+# carpeta, nada de aquí está en internet, aunque llegue a `main`.
+#
+# Al enlazar el repositorio: Base directory = sitios/puerta. Lo demás lo pone
+# este archivo. Se publica public/: index.html y sus fotos en fotos/.
+
+[build]
+  publish = "public"
+  # Solo se publica si cambia algo de esta carpeta. Sin esta línea, cualquier
+  # push a main la volvería a publicar (15 créditos), como les pasa a comunidad
+  # e itinerario (visto el 27/10). La primera vez, o sin caché, las dos
+  # referencias coinciden y se publica igualmente.
+  ignore = "[ \"$CACHED_COMMIT_REF\" != \"$COMMIT_REF\" ] && git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

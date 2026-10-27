@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Reviondo · Eventos, retiros y Modo Avión</title>
+<meta name="description" content="Grupos pequeños, dinámicas suaves y naturaleza, en la Sierra de Madrid.">
+<meta property="og:title" content="Reviondo">
+<meta property="og:description" content="Grupos pequeños, dinámicas suaves y naturaleza, en la Sierra de Madrid.">
+<meta property="og:type" content="website">
+<link rel="icon" href="fotos/logo.png">
+<link rel="preload" as="image" href="fotos/portada-movil.webp" media="(max-width: 699px)">
+<link rel="preload" as="image" href="fotos/portada.webp" media="(min-width: 700px)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* MARCA REVIONDO · manual de marzo de 2026. No se toca.
+   crema #EFE8D1 · hueso #EBE9DD · oliva #6B6955 · terracota #8D6657 · marrón #473328 */
+:root{
+  --paper:#EFE8D1;--card:#F7F3E3;--hueso:#EBE9DD;--nieve:#FDFBF4;
+  --ink:#473328;--texto:#54473C;--soft:#6B6955;--coral:#8D6657;--coral-hondo:#7A5748;
+  --rule:#D8CFB4;--rule2:#E7DFC6;
+  --g:16px;
+  color-scheme:only light;
+}
+@media(min-width:600px){:root{--g:24px}}
+html{background:var(--paper);scroll-behavior:smooth}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:'Jost',system-ui,-apple-system,sans-serif;font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--coral);outline-offset:3px;border-radius:2px}
+h1,h2,h3{font-family:'Noto Serif Display',Georgia,serif;font-weight:400;letter-spacing:-.015em;text-wrap:balance}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:var(--g)}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.h2{font-size:clamp(25px,6vw,32px);line-height:1.15}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;font-family:'Jost',sans-serif;font-size:15.5px;font-weight:500;
+  background:var(--coral);color:#FFFBF3;text-decoration:none;padding:12px 20px;border-radius:3px;border:1px solid var(--coral);
+  transition:background .15s ease}
+.btn:hover{background:var(--coral-hondo)}
+
+/* ── Arriba: su marca y su Instagram ── */
+.top{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:10px}
+.top img{width:36px;height:auto}
+.top a.ig{font-size:13.5px;color:var(--soft);text-decoration:none;border-bottom:1px solid var(--rule)}
+.top a.ig:hover{color:var(--coral);border-color:var(--coral)}
+
+/* ── 1 · La portada: su frase y sus dos botones ── */
+.portada{position:relative;overflow:hidden;background:#3A2B22;color:#FFFBF3}
+.portada img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%}
+.portada::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,30,24,.30) 0%,rgba(40,30,24,.42) 45%,rgba(40,30,24,.70) 100%)}
+.portada .wrap{position:relative;z-index:1;padding-block:22px 18px}
+.portada h1{font-size:clamp(23px,6.2vw,44px);line-height:1.15;text-shadow:0 1px 18px rgba(30,22,16,.45)}
+.portada .botones{display:grid;gap:8px;margin-top:16px}
+.portada .btn{font-size:14.5px;padding:11px 12px}
+.portada .btn.claro{background:rgba(253,251,244,.10);border-color:rgba(253,251,244,.6);color:#FFFBF3;backdrop-filter:blur(3px)}
+.portada .btn.claro:hover{background:rgba(253,251,244,.22)}
+@media(min-width:375px){.portada .botones{grid-template-columns:1fr 1fr}}
+@media(min-width:700px){
+  .portada .wrap{padding-block:56px 34px}
+  .portada h1{max-width:22ch}
+  .portada .botones{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .portada .btn{font-size:15.5px;padding:12px 22px}
+}
+
+/* ── 2 · Sus tres cosas, a la vista sin bajar ── */
+.tres{display:grid;gap:8px;padding-block:12px 4px}
+.cosa{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--coral);border-radius:0 4px 4px 0;
+  padding:9px 12px 10px 14px;scroll-margin-top:12px;transition:background .15s ease,box-shadow .2s ease}
+.cosa:hover{background:#F1EBD8}
+.cosa:target{box-shadow:0 0 0 2px var(--coral)}
+.cosa-foto{display:none}
+.cosa-t{display:block;font-family:'Noto Serif Display',Georgia,serif;font-size:19px;line-height:1.2}
+.cosa-d{display:block;font-size:14.5px;line-height:1.35;color:var(--texto);margin-top:1px}
+.cosa-p{display:block;font-size:13px;line-height:1.35;color:var(--soft);margin-top:4px}
+.cosa-p b{color:var(--coral);font-weight:600}
+.cosa-ir{width:30px;height:30px;border-radius:50%;border:1px solid var(--rule);display:grid;place-items:center;color:var(--coral);font-size:15px}
+.cosa-ir::before{content:'→'}
+@media(min-width:860px){
+  .tres{grid-template-columns:repeat(3,1fr);gap:14px;padding-block:22px 6px}
+  .cosa{display:flex;flex-direction:column;align-items:stretch;padding:0;border:1px solid var(--rule);border-top:3px solid var(--coral);border-radius:0 0 4px 4px;overflow:hidden}
+  .cosa-foto{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+  .cosa-txt{padding:16px 18px 6px;flex:1}
+  .cosa-t{font-size:23px}
+  .cosa-ir{width:auto;height:auto;border:0;border-radius:0;place-items:start;padding:0 18px 16px;font-size:14px;font-weight:500}
+  .cosa-ir::before{content:attr(data-texto)}
+}
+
+section{padding-block:40px}
+.cab{display:flex;align-items:end;justify-content:space-between;gap:14px;margin-bottom:16px}
+.flechas{display:none;gap:6px}
+.flechas button{width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--nieve);color:var(--coral);font-size:16px;cursor:pointer}
+.flechas button:hover{background:var(--card)}
+@media(hover:hover) and (pointer:fine){.flechas{display:flex}}
+
+/* ── 3 · Lo que se vive: sus fotos con sus siete textos ── */
+.tira{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;
+  margin-inline:calc(-1 * var(--g));padding-inline:var(--g);scroll-padding-inline:var(--g);-webkit-overflow-scrolling:touch}
+.tira::-webkit-scrollbar{display:none}
+.vive figure{flex:0 0 auto;width:min(66vw,250px);aspect-ratio:4/5;position:relative;border-radius:4px;overflow:hidden;background:var(--hueso);scroll-snap-align:start}
+.vive figure img{width:100%;height:100%;object-fit:cover}
+.vive figcaption{position:absolute;inset:auto 0 0 0;padding:34px 13px 12px;color:#FFFBF3;font-size:15px;line-height:1.3;font-weight:500;
+  background:linear-gradient(180deg,rgba(40,30,24,0),rgba(40,30,24,.80))}
+.pista{font-size:12.5px;color:var(--soft);margin-top:10px}
+
+/* ── 4 · La sesión de las seis semanas ── */
+.seis{background:var(--card);border:1px solid var(--rule);border-left:3px solid var(--coral);border-radius:0 4px 4px 0;padding:24px 22px}
+.seis h2{margin-top:8px}
+.seis p.txt{font-size:17px;line-height:1.55;color:var(--texto);margin-top:8px;max-width:40ch}
+@media(min-width:860px){.seis{display:grid;grid-template-columns:auto 1fr;gap:6px 34px;align-items:center;padding:32px 36px}
+  .seis .eyebrow{grid-column:1/-1}.seis h2{margin:0;font-size:38px}.seis p.txt{margin:0;font-size:19px}}
+
+/* ── 5 · Testimonios en horizontal, pasando ── */
+.voces .tira{gap:12px}
+.voz{flex:0 0 auto;width:min(80vw,320px);background:var(--nieve);border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+  scroll-snap-align:start;display:flex;flex-direction:column}
+.voz img{width:100%;aspect-ratio:16/9;object-fit:cover}
+.voz blockquote{font-family:'Noto Serif Display',Georgia,serif;font-style:italic;font-size:17px;line-height:1.45;padding:16px 18px 0;flex:1}
+.voz figcaption{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);font-weight:500;padding:12px 18px 16px}
+
+/* ── 6 · Quién es ella, y la comunidad otra vez ── */
+.sara{display:grid;gap:22px;align-items:center}
+.sara img{width:100%;max-width:260px;aspect-ratio:4/5;object-fit:cover;object-position:50% 35%;border-radius:4px}
+@media(min-width:760px){.sara img{max-width:360px}}
+.sara h2{margin:8px 0 12px}
+.sara p.txt{font-size:16px;line-height:1.65;color:var(--texto);margin-bottom:10px}
+@media(min-width:760px){.sara{grid-template-columns:minmax(0,360px) 1fr;gap:44px}}
+
+.final{position:relative;overflow:hidden;background:#3A2B22;color:#FFFBF3;text-align:center;margin-top:8px}
+.final img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.final::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(40,30,24,.66),rgba(40,30,24,.80))}
+.final .wrap{position:relative;z-index:1;padding-block:56px}
+.final .eyebrow{color:#E7DCC4}
+.final h2{color:#FFFBF3;margin:10px 0 10px}
+.final p{font-size:16px;color:#F2EADC;max-width:36ch;margin:0 auto 22px}
+.final .btn{background:#FDFBF4;color:var(--ink);border-color:#FDFBF4}
+.final .btn:hover{background:#fff}
+
+footer{padding:26px 0 40px;text-align:center}
+footer img{width:52px;height:auto;margin:0 auto 12px;opacity:.85}
+footer p{font-size:13px;color:var(--soft);line-height:1.7}
+footer a{color:var(--soft);text-decoration:none;border-bottom:1px solid var(--rule)}
+
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
+/* Luz forzada: la identidad de Reviondo es crema. */
+@media(prefers-color-scheme:dark){
+  html,body{background:#EFE8D1!important;color:#473328!important}
+  .cosa,.seis{background:#F7F3E3!important}
+  .voz{background:#FDFBF4!important}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap top">
+  <a href="#" aria-label="Reviondo, arriba"><img src="fotos/logo.png" alt="Reviondo" width="36" height="33"></a>
+  <a class="ig" href="https://instagram.com/reviondo.r" target="_blank" rel="noopener">@reviondo.r</a>
+</div>
+
+<!-- 1 · La portada -->
+<header class="portada">
+  <picture>
+    <source media="(min-width: 700px)" srcset="fotos/portada.webp">
+    <img src="fotos/portada-movil.webp" alt="Un grupo haciendo yoga entre pinos, por la mañana" fetchpriority="high">
+  </picture>
+  <div class="wrap">
+    <h1>Grupos pequeños, dinámicas suaves y naturaleza, en la Sierra de Madrid.</h1>
+    <div class="botones">
+      <a class="btn" data-boton="portada" href="https://reviondo-comunidad.netlify.app/?c=puerta&amp;b=portada">Entra en la comunidad</a>
+      <a class="btn claro" href="#eventos">Ver próximos eventos</a>
+    </div>
+  </div>
+</header>
+
+<!-- 2 · Sus tres cosas. El orden es el de su Word del 30/09: eventos, retiros
+     y programa Modo Avión. Para cambiarlo basta con mover los tres bloques. -->
+<nav class="wrap tres" aria-label="Eventos, retiros y programa Modo Avión">
+
+  <a class="cosa" id="eventos" data-boton="eventos" href="https://reviondo-comunidad.netlify.app/?p=evento&amp;c=puerta&amp;b=eventos">
+    <img class="cosa-foto" src="fotos/c-eventos.webp" alt="" loading="lazy" width="600" height="360">
+    <span class="cosa-txt">
+      <span class="cosa-t">Eventos en la naturaleza</span>
+      <span class="cosa-d">Una tarde para regalarte y tomar conciencia.</span>
+      <!-- Solo los próximos. Cuando se sepa la fecha, se deja solo esa. -->
+      <span class="cosa-p">Próximo: <b>28 de noviembre o 12 de diciembre</b></span>
+    </span>
+    <span class="cosa-ir" data-texto="Avísame de la fecha →" aria-hidden="true"></span>
+  </a>
+
+  <!-- Cuando su página de venta del retiro de febrero esté publicada (documento 7),
+       este enlace va allí y el texto pasa a «Ver el retiro →». -->
+  <a class="cosa" id="retiros" data-boton="retiros" href="https://reviondo-comunidad.netlify.app/?p=retiro&amp;c=puerta&amp;b=retiros">
+    <img class="cosa-foto" src="fotos/c-retiros.webp" alt="" loading="lazy" width="900" height="600">
+    <span class="cosa-txt">
+      <span class="cosa-t">Retiros</span>
+      <span class="cosa-d">Una transformación acompañada.</span>
+      <span class="cosa-p">Próximo: <b>del 19 al 21 de febrero</b></span>
+    </span>
+    <span class="cosa-ir" data-texto="Avísame →" aria-hidden="true"></span>
+  </a>
+
+  <a class="cosa" id="programa" data-boton="programa" href="https://reviondo-comunidad.netlify.app/?p=programa&amp;c=puerta&amp;b=programa">
+    <img class="cosa-foto" src="fotos/c-programa.webp" alt="" loading="lazy" width="460" height="345">
+    <span class="cosa-txt">
+      <span class="cosa-t">El programa Modo Avión</span>
+      <span class="cosa-d">Para quien pasa demasiado tiempo con el móvil y no puede cambiarlo solo.</span>
+      <span class="cosa-p">Entra en la comunidad y <b>te avisamos primero</b>.</span>
+    </span>
+    <span class="cosa-ir" data-texto="Entrar →" aria-hidden="true"></span>
+  </a>
+
+</nav>
+
+<main>
+
+<!-- 3 · Lo que se vive. Sus siete textos, tal cual los escribió (Word del 30/09). -->
+<section class="wrap vive" aria-labelledby="t-vive">
+  <div class="cab">
+    <h2 class="h2" id="t-vive">Lo que se vive</h2>
+    <div class="flechas" data-para="tira-vive"><button type="button" data-dir="-1" aria-label="Anterior">←</button><button type="button" data-dir="1" aria-label="Siguiente">→</button></div>
+  </div>
+  <div class="tira" id="tira-vive" tabindex="0" aria-label="Fotos de sus eventos y retiros">
+    <figure><img src="fotos/v-yoga.webp" alt="" loading="lazy" width="460" height="575"><figcaption>Yoga por la mañana, en la naturaleza</figcaption></figure>
+    <figure><img src="fotos/v-gestalt.webp" alt="" loading="lazy" width="460" height="575"><figcaption>Dinámicas en movimiento de Gestalt</figcaption></figure>
+    <figure><img src="fotos/v-taller.webp" alt="" loading="lazy" width="700" height="700"><figcaption>Taller con enfoque psicológico</figcaption></figure>
+    <figure><img src="fotos/v-journaling.webp" alt="" loading="lazy" width="460" height="575"><figcaption>Journaling: escribes, no solo escuchas</figcaption></figure>
+    <figure><img src="fotos/v-compartir.webp" alt="" loading="lazy" width="324" height="400"><figcaption>Reflexión y compartir</figcaption></figure>
+    <figure><img src="fotos/v-aburrimiento.webp" alt="" loading="lazy" width="700" height="571"><figcaption>Aburrimiento</figcaption></figure>
+    <figure><img src="fotos/v-meditacion.webp" alt="" loading="lazy" width="460" height="575"><figcaption>Meditación</figcaption></figure>
+  </div>
+  <p class="pista" aria-hidden="true">Desliza para ver más →</p>
+</section>
+
+<!-- 4 · La sesión de las seis semanas: su diferencia -->
+<div class="wrap">
+  <section class="seis" aria-labelledby="t-seis">
+    <p class="eyebrow">Después del retiro</p>
+    <h2 class="h2" id="t-seis">Seis semanas después</h2>
+    <p class="txt">Nos volvemos a ver en la sesión «Modo Avión», para ver tus avances.</p>
+  </section>
+</div>
+
+<!-- 5 · Testimonios. Copiados literal de sus formularios de después de cada
+     evento, de la pregunta en la que se pide el testimonio. Sin nombres: nadie
+     ha dado todavía el sí a salir con el suyo. Con el sí de alguien, su nombre
+     va en su <figcaption>. -->
+<section class="wrap voces" aria-labelledby="t-voces">
+  <div class="cab">
+    <h2 class="h2" id="t-voces">Lo que se llevaron</h2>
+    <div class="flechas" data-para="tira-voces"><button type="button" data-dir="-1" aria-label="Anterior">←</button><button type="button" data-dir="1" aria-label="Siguiente">→</button></div>
+  </div>
+  <div class="tira" id="tira-voces" tabindex="0" aria-label="Testimonios" data-pasa>
+    <figure class="voz"><img src="fotos/t-1.webp" alt="" loading="lazy" width="700" height="467">
+      <blockquote>«Me ha encantado!! Es un ejercicio que no tiene edad específica, y he tenido la suerte de poder vivirlo con mi madre. Sara ha conseguido que desconectemos y que nos veamos capaces de hacer todas las posturas. Crea un grupo de confianza perfecto para hablar libremente y compartir experiencias. Repetiría 100% (y ya lo he recomendado a mis amigas jajajaja)»</blockquote>
+      <figcaption>Después de un evento</figcaption></figure>
+    <figure class="voz"><img src="fotos/t-2.webp" alt="" loading="lazy" width="700" height="316">
+      <blockquote>«La verdad que me ayudó mucho el parar y darme cuenta de lo enganchada al móvil que estaba . El ver que al resto les pasaba un poco lo mismo también me ayudó un montón»</blockquote>
+      <figcaption>Después de un evento</figcaption></figure>
+    <figure class="voz"><img src="fotos/t-3.webp" alt="" loading="lazy" width="700" height="283">
+      <blockquote>«La actividad fue bastante bien. Muy bien organizada. Me encantaron las dinámicas de grupo y actividades. Todos pudimos conectar muy bien y expresar nuestras inquietudes. Nos fuimos con pequeños recursos y muchas cosas que pensar y cambiar. …»</blockquote>
+      <figcaption>Después de un evento · junio</figcaption></figure>
+    <figure class="voz"><img src="fotos/t-4.webp" alt="" loading="lazy" width="460" height="345">
+      <blockquote>«Recomiendo muchísimo este tipo de experiencias sobretodo cuando vives en una ciudad como Madrid tan sumamente automática y con un día a día con muchos estímulos que no te deja desconectar tu mente en ningún momento. Ayuda mucho a volver a la realidad con las pilas cargadas!»</blockquote>
+      <figcaption>Después de un evento</figcaption></figure>
+    <figure class="voz"><img src="fotos/t-5.webp" alt="" loading="lazy" width="700" height="331">
+      <blockquote>«Me encantó el evento porque me hizo parar y reflexionar sobre mi uso del móvil. Cuando salí me sentía mucho más presente y consciente en mi vida y con el uso de mi móvil. Gracias»</blockquote>
+      <figcaption>Después de un evento · junio</figcaption></figure>
+    <figure class="voz"><img src="fotos/t-6.webp" alt="" loading="lazy" width="700" height="439">
+      <blockquote>«Una experiencia muy bonita y diferente, que me ha permitido parar, desconectar y conectar conmigo. Me llevo momentos de paz, reflexión y, sobre todo, el haberme dado un tiempo diferente y agradable y darme cuenta de la importancia de la desconexión digital. Sin duda, una experiencia que recomiendo.»</blockquote>
+      <figcaption>Después de un evento · septiembre</figcaption></figure>
+  </div>
+</section>
+
+<!-- 6 · Quién es ella. Sus palabras, del borrador de su página (24/09). -->
+<section class="wrap sara" aria-labelledby="t-sara">
+  <img src="fotos/sara.webp" alt="Sara, de Reviondo" loading="lazy" width="620" height="775">
+  <div>
+    <p class="eyebrow">Quién está detrás</p>
+    <h2 class="h2" id="t-sara">Sara</h2>
+    <p class="txt">Reviondo surge de mi propia necesidad de reducir el uso del móvil y usarlo con más conciencia. Me apasiona el mundo de la psicología y por eso quiero ayudar a las personas desde el autoconocimiento y el crecimiento personal.</p>
+    <p class="txt">Estoy formada en yoga en Bali y en segundo año de terapia Gestalt. Lo mío es el crecimiento personal: el yoga, la psicología positiva, el mindfulness y la inteligencia emocional son mis herramientas.</p>
+    <p class="txt">Conmigo te escuchas, encuentras tu lugar seguro y conoces un poquito más de ti.</p>
+  </div>
+</section>
+
+</main>
+
+<!-- …y la comunidad otra vez -->
+<section class="final" aria-labelledby="t-final">
+  <img src="fotos/final.webp" alt="" loading="lazy" width="1200" height="800">
+  <div class="wrap">
+    <p class="eyebrow">La comunidad</p>
+    <h2 class="h2" id="t-final">Entra en la comunidad</h2>
+    <p>Los 8 microhábitos para bajar el móvil, nada más entrar. Y las fechas antes que nadie.</p>
+    <a class="btn" data-boton="final" href="https://reviondo-comunidad.netlify.app/?c=puerta&amp;b=final">Entra en la comunidad</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="fotos/logo.png" alt="" width="52" height="47" loading="lazy">
+    <p>Reviondo · Madrid · <a href="https://instagram.com/reviondo.r" target="_blank" rel="noopener">@reviondo.r</a></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  /* ═══ DE DÓNDE LLEGA CADA PERSONA Y QUÉ BOTÓN PULSA ═══════════════════════
+     Cada botón que lleva a su formulario de la comunidad ya lleva en su enlace:
+       ?b=  el botón que se ha pulsado (portada, eventos, retiros, programa, final)
+       ?p=  qué le interesa (evento, retiro, programa) → su formulario lo guarda en `palanca`
+       ?c=  de dónde venía. Si llega aquí con ?c= (bio, qr, flowfest…) se respeta;
+            si no, se queda en «puerta».
+     Aquí solo se arrastra su ?c= y las etiquetas que pone Instagram (utm_*), para
+     que no se pierdan por el camino. Su formulario guarda la dirección entera en
+     `origen`, y de ahí lo saca su panel. */
+  var Q=new URLSearchParams(location.search), arrastra={};
+  var c=(Q.get('c')||'').toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);
+  if(c) arrastra.c=c;
+  ['utm_source','utm_medium','utm_campaign','utm_content'].forEach(function(k){
+    var v=(Q.get(k)||'').replace(/[^\w.-]/g,'').slice(0,60);
+    if(v) arrastra[k]=v;
+  });
+  if(Object.keys(arrastra).length){
+    document.querySelectorAll('a[data-boton]').forEach(function(a){
+      var u=new URL(a.href);
+      if(u.hostname!=='reviondo-comunidad.netlify.app') return;
+      Object.keys(arrastra).forEach(function(k){ u.searchParams.set(k,arrastra[k]); });
+      a.href=u.toString();
+    });
+  }
+
+  /* ═══ CONTADOR DE VISITAS (documento 4) ═════════════════════════════════
+     Todavía no existe: lo pone su panel. Cuando esté, se carga aquí y cuenta
+     la visita y cada clic en un [data-boton]. Hasta entonces se mide lo de
+     arriba: quién entra en la comunidad desde aquí, por qué botón y de dónde. */
+
+  /* ═══ LAS DOS TIRAS: flechas en ordenador, y los testimonios pasan solos ═ */
+  function paso(tira){
+    var f=tira.children[0];
+    return f ? f.getBoundingClientRect().width + parseFloat(getComputedStyle(tira).columnGap||0) : tira.clientWidth;
+  }
+  function mueve(tira,dir){
+    var fin=tira.scrollLeft + tira.clientWidth >= tira.scrollWidth - 4;
+    if(dir>0 && fin) tira.scrollTo({left:0,behavior:'smooth'});
+    else tira.scrollBy({left:dir*paso(tira),behavior:'smooth'});
+  }
+  document.querySelectorAll('.flechas').forEach(function(f){
+    var tira=document.getElementById(f.getAttribute('data-para'));
+    f.querySelectorAll('button').forEach(function(b){
+      b.addEventListener('click',function(){ mueve(tira,+b.getAttribute('data-dir')); });
+    });
+  });
+
+  // Pasan solos cada 6 s mientras se ven. Se paran si la persona las toca, pasa
+  // el ratón por encima o su móvil pide menos movimiento.
+  var quieto=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.tira[data-pasa]').forEach(function(tira){
+    if(quieto) return;
+    var visible=false, parada=0;
+    function para(){ parada=Date.now(); }
+    ['pointerdown','touchstart','wheel','focusin','mouseenter'].forEach(function(ev){ tira.addEventListener(ev,para,{passive:true}); });
+    tira.addEventListener('mouseleave',function(){ parada=Date.now()-10000; });
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(e){ visible=e[0].isIntersecting; },{threshold:.5}).observe(tira);
+    } else { visible=true; }
+    setInterval(function(){
+      if(!visible || document.hidden || Date.now()-parada<12000) return;
+      mueve(tira,1);
+    },6000);
+  });
+})();
+</script>
+</body>
+</html>

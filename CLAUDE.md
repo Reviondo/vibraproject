@@ -22,6 +22,7 @@ aquí lo ve cualquiera.
 | `sitios/retiro-formulario/public/gracias-evento/` | …/gracias-evento/ | Gracias al pagar un evento (27/10). Día, hora, sitio, mapa y grupo llegan en el enlace de pago de cada evento (`?dia=&hora=&lugar=&mapa=&grupo=`): un evento nuevo no se publica |
 | `sitios/retiro-itinerario/` | https://reviondo-retiro-itinerario.netlify.app | El itinerario del retiro. Solo para quien ya tiene plaza. Sin precio ni venta |
 | `sitios/modo-avion/` | ¿https://reviondo-modo-avion.netlify.app? (por confirmar) | La página de venta del retiro que toca vender ahora: hoy, el de febrero de 2027. **No es su web principal.** Pública. El sitio está en la cuenta de Netlify de VIBRA y **no está enlazado**: un merge a `main` no la publica. Vista previa: https://claude.ai/artifact/WhD5XTvGs2RNHZCBCBLuN5 |
+| `sitios/puerta/` | Aún no existe (prevista https://reviondo.netlify.app, si está libre) | Su página principal, la «puerta» (documento 8, 27/10): el único enlace de su biografía, con eventos, retiros y programa Modo Avión a la vista. Pública. **No hay sitio en Netlify todavía**: un merge a `main` no la publica. Vista previa: https://claude.ai/artifact/Uq4pbXjtctHT9SBVADkS8c |
 | `panel/buzon.html` | https://claude.ai/artifact/QSWyWWamURJjkbXVa9d96a | Su panel: quién ha rellenado qué. Solo lectura |
 | `supabase/migrations/` | proyecto `loarpexzqkwkrctfrxgq` | 004 comunidad · 005 retiro · 006 despierta. Las tres están aplicadas |
 | `.github/workflows/` | pestaña Actions | Toca la base 3 veces al día para que no se pause |
@@ -36,8 +37,9 @@ Producción es pública; las vistas previas piden entrar con la cuenta del equip
 
 Cada sitio publica solo su `public/`: un `index.html` (y en el del formulario,
 también `gracias/` y `gracias-evento/`, que llevan el `noindex` del sitio y no se
-enlazan desde nada: se llega pagando). Nunca se publica un `.md`, un `.sql` ni
-nada de `docs/`.
+enlazan desde nada: se llega pagando). La puerta lleva además `fotos/`: WebP
+reducidas y sin datos dentro (ni ubicación ni cámara), sueltas para que cada una
+cargue solo cuando se ve. Nunca se publica un `.md`, un `.sql` ni nada de `docs/`.
 
 ## Publicar gasta créditos: los cambios se agrupan
 
@@ -94,6 +96,25 @@ no cuadra con su Drive o con este repositorio, manda lo de Sara.
   enseñarle la página se republica su vista previa
   (https://claude.ai/artifact/WhD5XTvGs2RNHZCBCBLuN5): no gasta créditos. Los
   huecos marcados «FALTA» se rellenan con lo que diga ella antes de publicarla.
+- **La puerta** (`sitios/puerta/`, documento 8, 27/10). Está en `cambios` porque
+  lo pidió Sara, sin publicar: no tiene sitio en Netlify, así que un merge a
+  `main` no la saca. Se publica cuando ella diga «sí»: se crea el sitio en su
+  cuenta (gratis), se enlaza con Base directory = `sitios/puerta` y sale su
+  primera publicación (15 créditos). Su `ignore` lleva una guarda: sin ella, la
+  primera vez (sin caché) cancelaría su propia publicación.
+  - Mide desde el primer día sin contador: cada botón a la comunidad lleva
+    `?b=` (portada, eventos, retiros, programa, final), `?p=` (evento, retiro,
+    programa → `palanca`) y `?c=` (el que traía al llegar, o `puerta`), más las
+    `utm_*` de Instagram. Todo cae en `origen` del formulario.
+  - El contador (4) va donde lo marca su script: contar la visita y cada clic
+    en `[data-boton]`.
+  - Cuando la página de venta (7) esté publicada, el botón de Retiros va allí
+    («Ver el retiro →»). Hasta entonces lleva a la comunidad.
+  - Eventos: solo el próximo. Cuando se sepa la fecha, se deja solo esa.
+  - Testimonios: literales, de la pregunta de testimonio de sus formularios,
+    sin nombre. Con el sí de una persona, su nombre va en su `figcaption`.
+  - Cuando esté publicada, Sara decide si su biografía y su QR pasan a la
+    puerta (en el QR, el `to` de `sitios/comunidad/netlify.toml`).
 
 ## La base de datos (Supabase de Sara)
 
