@@ -1,0 +1,931 @@
+<title>Panel de Reviondo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@400;500;600&display=swap">
+<style>
+/* Panel de Reviondo (documento 4, 27/10). Una columna para el móvil, en el orden
+   del camino de su gente: llegan → entran → reservan → lo cobrado → el retiro →
+   todas las personas. Marca Reviondo: crema, hueso, oliva, terracota, marrón;
+   Noto Serif Display para titulares y cifras, Jost para el texto. Siempre en claro. */
+:root{
+  color-scheme: light;
+  --crema:#EFE8D1; --papel:#F7F3E3; --nieve:#FDFBF4; --hueso:#EBE9DD;
+  --tinta:#473328; --tinta-suave:#5E4F43; --oliva:#6B6955; --terracota:#8D6657; --terracota-honda:#7A5748;
+  --raya:#D8CFB4; --raya-suave:#E7DFC6;
+  --verde:#4F6B4A; --verde-suave:#E6EDE1; --aviso:#7A3E28; --aviso-fondo:#F6E6DA; --aviso-borde:#DDBBA6;
+  --wa:#1F7A3A; --wa-hondo:#18632F;
+  --serif:'Noto Serif Display', 'Iowan Old Style', Georgia, 'Times New Roman', serif;
+  --sans:'Jost', 'Avenir Next', 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--crema)}
+body{background:var(--crema);color:var(--tinta);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.envoltura{max-width:680px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:20px 64px;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--terracota-honda)}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--terracota);outline-offset:2px;border-radius:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Cabecera */
+.cab{display:flex;flex-direction:column;gap:12px}
+.cab-fila{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.marca{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--oliva);font-weight:600}
+h1{font-size:34px;line-height:1.05}
+h1 i{color:var(--terracota);font-weight:400}
+.estado{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--oliva)}
+.estado span{display:flex;align-items:center;gap:7px}
+.punto{width:7px;height:7px;border-radius:50%;background:var(--raya);flex:none}
+.estado .ok .punto{background:var(--verde)}
+.estado .mal .punto{background:var(--aviso)}
+.estado .cargando .punto{background:var(--terracota);animation:latido 1.2s ease-in-out infinite}
+@keyframes latido{50%{opacity:.3}}
+.btn{border:1px solid var(--raya);background:var(--nieve);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:500;cursor:pointer}
+.btn:hover{border-color:var(--terracota)}
+.btn[disabled]{opacity:.55;cursor:default}
+
+.periodo{display:grid;grid-template-columns:repeat(3,1fr);background:var(--hueso);border:1px solid var(--raya);border-radius:999px;padding:3px}
+.periodo button{border:0;background:none;border-radius:999px;padding:8px 6px;font-size:14px;font-weight:500;color:var(--tinta-suave);cursor:pointer}
+.periodo button[aria-pressed="true"]{background:var(--nieve);color:var(--tinta);box-shadow:0 1px 2px rgba(71,51,40,.12)}
+
+.aviso{background:var(--aviso-fondo);border:1px solid var(--aviso-borde);color:var(--aviso);border-radius:6px;padding:10px 12px;font-size:14px}
+.aviso b{font-weight:600}
+.aviso .btn{margin-top:8px;color:var(--tinta)}
+
+/* El camino: cuatro cifras */
+.camino{display:grid;grid-template-columns:repeat(4,1fr);gap:0;background:var(--nieve);border:1px solid var(--raya);border-radius:8px;overflow:hidden}
+.etapa{padding:14px 12px 12px;display:flex;flex-direction:column;gap:2px;min-width:0;border-left:1px solid var(--raya-suave);text-decoration:none;color:inherit}
+.etapa:first-child{border-left:0}
+.etapa .n-paso{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--oliva);font-weight:600}
+.etapa .cifra{font-family:var(--serif);font-size:34px;line-height:1.1;color:var(--tinta)}
+.etapa .que{font-size:13px;color:var(--tinta-suave);line-height:1.3}
+.etapa .de{font-size:11.5px;color:var(--oliva);margin-top:auto;padding-top:6px}
+@media (max-width:520px){
+  .camino{grid-template-columns:1fr 1fr}
+  .etapa:nth-child(3){border-left:0}
+  .etapa:nth-child(n+3){border-top:1px solid var(--raya-suave)}
+}
+.ratio{font-size:13px;color:var(--oliva);margin-top:-12px}
+
+/* Tramos */
+.tramo{display:flex;flex-direction:column;gap:12px}
+.tramo-cab{display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--raya);padding-top:16px}
+.tramo-cab h2{font-size:24px;line-height:1.15}
+.nota{font-size:13.5px;color:var(--oliva)}
+.vacio{font-size:14.5px;color:var(--tinta-suave);background:var(--papel);border:1px dashed var(--raya);border-radius:6px;padding:12px 14px}
+.caja{background:var(--nieve);border:1px solid var(--raya);border-radius:8px;padding:14px}
+.caja h3{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--oliva);font-weight:600;margin-bottom:10px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.dos{grid-template-columns:1fr}}
+
+/* Barras */
+.barras{display:flex;flex-direction:column;gap:8px}
+.barra{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:14px}
+.barra .nombre{min-width:0;overflow-wrap:anywhere}
+.barra .valor{font-variant-numeric:tabular-nums;color:var(--tinta-suave)}
+.barra .pista{grid-column:1 / -1;height:6px;background:var(--hueso);border-radius:3px;overflow:hidden}
+.barra .relleno{height:100%;background:var(--terracota);border-radius:3px}
+.dias{display:flex;align-items:flex-end;gap:2px;height:64px;padding-top:4px}
+.dias div{flex:1;background:var(--raya);border-radius:2px 2px 0 0;min-height:2px}
+.dias div.en{background:var(--terracota)}
+.dias-pie{display:flex;justify-content:space-between;font-size:11.5px;color:var(--oliva);margin-top:4px}
+
+/* Personas */
+.lista{display:flex;flex-direction:column;gap:10px}
+.persona{background:var(--nieve);border:1px solid var(--raya);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.persona.pendiente{border-left:3px solid var(--terracota)}
+.p-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.p-cab h3{font-size:19px;min-width:0;overflow-wrap:anywhere}
+.cuando{font-size:12.5px;color:var(--oliva);white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;line-height:1.2;padding:4px 9px;border-radius:999px;background:var(--hueso);color:var(--tinta-suave);border:1px solid var(--raya-suave)}
+.chip.retiro{background:#F3E5DD;border-color:#E3CBBE;color:var(--terracota-honda)}
+.chip.evento{background:#EDE9D6;border-color:#DDD6B8;color:#5B5838}
+.chip.programa{background:#E9E6EF;border-color:#D7D1E2;color:#4F4664}
+.chip.ok{background:var(--verde-suave);border-color:#CFDCC7;color:#3F5A3A}
+.chip.falta{background:var(--aviso-fondo);border-color:var(--aviso-borde);color:var(--aviso)}
+.sig{font-size:14.5px;color:var(--tinta)}
+.sig .et{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--oliva);font-weight:600;margin-bottom:1px}
+.acciones{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.wa{display:inline-flex;align-items:center;gap:7px;background:var(--wa);color:#fff;text-decoration:none;border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500}
+.wa:hover{background:var(--wa-hondo)}
+.wa.suave{background:none;color:var(--wa);border:1px solid #BCD3C2}
+.contacto{font-size:13px;color:var(--oliva);user-select:all;overflow-wrap:anywhere}
+details{font-size:13.5px;color:var(--tinta-suave)}
+details summary{cursor:pointer;color:var(--terracota-honda);font-size:13px}
+details p{margin-top:6px;white-space:pre-wrap;background:var(--papel);border-radius:6px;padding:8px 10px}
+
+.filtros{display:flex;flex-wrap:wrap;gap:6px}
+.filtros button{border:1px solid var(--raya);background:var(--nieve);border-radius:999px;padding:6px 12px;font-size:13.5px;cursor:pointer}
+.filtros button[aria-pressed="true"]{background:var(--tinta);border-color:var(--tinta);color:var(--nieve)}
+.buscar{width:100%;border:1px solid var(--raya);background:var(--nieve);border-radius:6px;padding:10px 12px;font-size:16px}
+
+/* Cobros */
+.grande{font-family:var(--serif);font-size:40px;line-height:1.05}
+.fila-dato{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:6px 0;border-top:1px solid var(--raya-suave)}
+.fila-dato:first-of-type{border-top:0}
+.fila-dato .v{font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Retiro */
+.plazas{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.plazas .grande span{font-size:22px;color:var(--oliva)}
+.bolas{display:flex;gap:6px;flex-wrap:wrap}
+.bola{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--terracota)}
+.bola.llena{background:var(--terracota)}
+.elegir{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--oliva)}
+.elegir select{border:1px solid var(--raya);background:var(--nieve);border-radius:6px;padding:6px 8px}
+.plaza{padding:9px 0;border-top:1px solid var(--raya-suave);display:flex;flex-direction:column;gap:3px}
+.plaza-cab{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.plaza-cab b{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.plaza .cifras{font-size:13.5px;color:var(--tinta-suave);font-variant-numeric:tabular-nums}
+.cocina li{padding:6px 0;border-top:1px solid var(--raya-suave);font-size:14.5px}
+.cocina li:first-child{border-top:0}
+.cocina b{font-weight:600}
+ul.limpia{list-style:none;margin:0;padding:0}
+.privado{font-size:12.5px;color:var(--aviso)}
+
+.pie{font-size:12.5px;color:var(--oliva);border-top:1px solid var(--raya);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.pie a{color:var(--oliva)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="envoltura">
+  <header class="cab">
+    <div class="cab-fila">
+      <div>
+        <p class="marca">Reviondo</p>
+        <h1>Tu <i>panel</i></h1>
+      </div>
+      <button class="btn" id="btn-actualizar" type="button">Actualizar</button>
+    </div>
+    <div class="estado" id="estado" aria-live="polite">
+      <span id="estado-sb" class="cargando"><i class="punto"></i>Tu base: leyendo…</span>
+      <span id="estado-st" class="cargando"><i class="punto"></i>Tu Stripe: leyendo…</span>
+    </div>
+    <div class="periodo" role="group" aria-label="Periodo">
+      <button type="button" data-periodo="hoy" aria-pressed="false">Hoy</button>
+      <button type="button" data-periodo="semana" aria-pressed="false">Esta semana</button>
+      <button type="button" data-periodo="30" aria-pressed="true">30 días</button>
+    </div>
+    <div id="aviso" class="aviso" hidden></div>
+  </header>
+
+  <nav class="camino" aria-label="El camino de tu gente">
+    <a class="etapa" href="#llegan"><span class="n-paso">1 · Llegan</span><span class="cifra num" id="c-llegan">–</span><span class="que">visitas a tus páginas</span><span class="de">del contador</span></a>
+    <a class="etapa" href="#entran"><span class="n-paso">2 · Entran</span><span class="cifra num" id="c-entran">–</span><span class="que">en tu comunidad</span><span class="de">de tu formulario</span></a>
+    <a class="etapa" href="#reservan"><span class="n-paso">3 · Reservan</span><span class="cifra num" id="c-reservan">–</span><span class="que" id="c-reservan-sub">pagos</span><span class="de">de tu Stripe</span></a>
+    <a class="etapa" href="#retiro"><span class="n-paso">4 · Preparan</span><span class="cifra num" id="c-preparan">–</span><span class="que">formularios de antes del retiro</span><span class="de">de tu formulario</span></a>
+  </nav>
+  <p class="ratio" id="ratio" hidden></p>
+
+  <section class="tramo" id="llegan">
+    <div class="tramo-cab"><h2>Llegan a tus páginas</h2></div>
+    <div id="llegan-cuerpo"></div>
+  </section>
+
+  <section class="tramo" id="entran">
+    <div class="tramo-cab"><h2>Entran en tu comunidad</h2></div>
+    <div id="entran-cuerpo"></div>
+  </section>
+
+  <section class="tramo" id="reservan">
+    <div class="tramo-cab"><h2>Reservan y pagan</h2></div>
+    <div id="reservan-cuerpo"></div>
+  </section>
+
+  <section class="tramo" id="cobrado">
+    <div class="tramo-cab"><h2>Lo cobrado este mes</h2></div>
+    <div id="cobrado-cuerpo"></div>
+  </section>
+
+  <section class="tramo" id="retiro">
+    <div class="tramo-cab"><h2 id="retiro-titulo">Tu retiro</h2></div>
+    <div id="retiro-cuerpo"></div>
+  </section>
+
+  <section class="tramo" id="personas">
+    <div class="tramo-cab"><h2>Todas tus personas</h2></div>
+    <p class="nota">Cada persona una vez, aunque haya rellenado o pagado varias cosas: se la reconoce por su correo o su teléfono. Las más recientes, arriba.</p>
+    <div class="filtros" role="group" aria-label="Filtrar personas">
+      <button type="button" data-filtro="pendiente" aria-pressed="true">Por escribir</button>
+      <button type="button" data-filtro="pagado" aria-pressed="false">Han pagado</button>
+      <button type="button" data-filtro="todas" aria-pressed="false">Todas</button>
+    </div>
+    <input class="buscar" id="buscar" type="search" placeholder="Buscar por nombre, correo o teléfono" autocomplete="off">
+    <div id="personas-cuerpo"></div>
+  </section>
+
+  <footer class="pie">
+    <p>Lee en directo tu base de Supabase y tu Stripe, con tu cuenta de Claude, cada vez que lo abres y cada 2 minutos mientras está abierto. No guarda nada: ni una respuesta, ni un pago.</p>
+    <p>Los botones de WhatsApp abren la conversación con el mensaje escrito: lo lees y lo cambias antes de mandarlo.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ── Lo que es de Sara ─────────────────────────────────────────────
+     Si cambia la edición del retiro, se cambia aquí `retiro`. */
+  var CONFIG = {
+    supabase: { servidor: 'Supabase', herramienta: 'execute_sql', proyecto: 'loarpexzqkwkrctfrxgq' },
+    stripe: { servidor: 'Stripe', herramienta: 'stripe_api_read', cuenta: 'acct_1UURpH9zz9XRvFad' },
+    cadaMs: 120000,
+    retiro: {
+      clave: 'febrero-2027', nombre: 'Tu retiro del 19 al 21 de febrero', fechas: 'del 19 al 21 de febrero',
+      plazas: 9, baratas: 3, precioBarato: 435, precio: 485,
+      formulario: 'https://reviondo-retiro-formulario.netlify.app/?r=febrero-2027'
+    },
+    venta: 'https://reviondo-modo-avion.netlify.app',
+    paginas: { 'comunidad': 'Formulario de entrada', 'retiro-formulario': 'Formulario de antes del retiro', 'retiro-itinerario': 'Itinerario', 'venta': 'Página de venta' },
+    noContar: [
+      ['Formulario de entrada', 'https://reviondo-comunidad.netlify.app/#no-me-cuentes'],
+      ['Formulario de antes del retiro', 'https://reviondo-retiro-formulario.netlify.app/#no-me-cuentes'],
+      ['Página de venta', 'https://reviondo-modo-avion.netlify.app/#no-me-cuentes']
+    ]
+  };
+
+  // Solo lectura: una consulta, todo junto. Solo las columnas que enseña el panel.
+  var SQL = "select json_build_object(" +
+    "'comunidad', coalesce((select json_agg(t order by t.creado_en desc) from (" +
+      "select id, palanca, nombre, telefono, email, ciudad, mensaje, origen, creado_en " +
+      "from formulario_envios where sitio = 'reviondo' and formulario = 'comunidad') t), '[]'::json)," +
+    "'retiro', coalesce((select json_agg(t order by t.creado_en desc) from (" +
+      "select id, retiro, nombre, email, telefono, ciudad, yoga_nivel, esterilla, alimentacion, consent_imagen, creado_en " +
+      "from retiro_respuestas where sitio = 'reviondo') t), '[]'::json)," +
+    "'visitas', coalesce((select json_agg(t) from (" +
+      "select dia::text as dia, pagina, c, p, origen, aparato, count(*)::int as n from visitas " +
+      "where dia >= ((now() at time zone 'Europe/Madrid')::date - 35) group by 1, 2, 3, 4, 5, 6) t), '[]'::json)" +
+    ") as datos";
+
+  /* ── Cálculos (sin pantalla) ──────────────────────────────────── */
+  var R = (function(){
+    var fmtClave = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Madrid', year: 'numeric', month: '2-digit', day: '2-digit' });
+    var fmtSemana = new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Madrid', weekday: 'short' });
+    function clave(d){ return fmtClave.format(d); }
+    function sumaDias(k, n){ var d = new Date(k + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); }
+    function desde(periodo, ahora){
+      var hoy = clave(ahora);
+      if (periodo === 'hoy') return hoy;
+      if (periodo === 'semana') return sumaDias(hoy, -Math.max(0, ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(fmtSemana.format(ahora))));
+      return sumaDias(hoy, -29);
+    }
+    function limpio(s){ return (s == null ? '' : String(s)).trim(); }
+    function norm(s){ return limpio(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.,;:!¡¿?«»"'()\[\]]/g, ' ').replace(/\s+/g, ' ').trim(); }
+    function claveEmail(e){ e = limpio(e).toLowerCase(); return e.indexOf('@') > 0 ? e : ''; }
+    function claveTel(t){
+      var d = limpio(t).replace(/\D/g, '');
+      if (d.indexOf('00') === 0) d = d.slice(2);
+      if (d.length === 11 && d.indexOf('34') === 0) d = d.slice(2);
+      return d.length >= 8 ? d : '';
+    }
+    function numeroWa(t){
+      var d = limpio(t).replace(/\D/g, '');
+      if (d.indexOf('00') === 0) d = d.slice(2);
+      if (d.length === 9 && /^[6789]/.test(d)) d = '34' + d;
+      return d.length >= 10 ? d : '';
+    }
+    function primerNombre(n){ n = limpio(n); return n ? n.split(/\s+/)[0] : ''; }
+
+    // El formulario de la comunidad guarda sus dos preguntas en `mensaje`, en tres líneas.
+    function partesMensaje(m){
+      m = limpio(m);
+      var r = { traido: [], busca: [], sobre: '' };
+      var i = m.search(/^Sobre [^:\n]*:/m);
+      if (i >= 0) { r.sobre = m.slice(m.indexOf(':', i) + 1).trim(); m = m.slice(0, i); }
+      m.split('\n').forEach(function(l){
+        var j = l.indexOf(':'); if (j < 0) return;
+        var k = l.slice(0, j), v = l.slice(j + 1).split(' · ').map(limpio).filter(Boolean);
+        if (/^Qué le ha traído/i.test(k)) r.traido = v;
+        else if (/^Qué busca/i.test(k)) r.busca = v;
+      });
+      return r;
+    }
+    function params(url){
+      try { var u = new URL(url); return { c: (u.searchParams.get('c') || '').toLowerCase(), p: (u.searchParams.get('p') || '').toLowerCase() }; }
+      catch (e) { return { c: '', p: '' }; }
+    }
+    var PUERTAS = { 'modo-avion': 'Puerta «Necesito parar»', 'gestalt': 'Puerta «Quiero conocerme mejor»', 'desconexion': 'Puerta «El móvil me come el día»' };
+    function nombreEnlace(c, p){
+      if (c === 'bio') return 'Tu bio de Instagram';
+      if (c === 'qr') return 'Tu QR';
+      if (c.indexOf('qr-') === 0) return 'Tu QR · ' + c.slice(3);
+      if (c === 'flowfest') return 'Flow Fest';
+      if (c) return 'Enlace «' + c + '»';
+      if (PUERTAS[p]) return PUERTAS[p];
+      if (p.indexOf('retiro') === 0) return 'Tu página del retiro';
+      if (p) return 'Enlace «' + p + '»';
+      return '';
+    }
+    var ORIGENES = { instagram: 'Instagram', whatsapp: 'WhatsApp', google: 'Google', facebook: 'Facebook', tiktok: 'TikTok', linktree: 'Linktree', directo: 'Directo, sin web de origen' };
+    function nombreOrigen(o){
+      if (!o) return 'Sin dato';
+      if (ORIGENES[o]) return ORIGENES[o];
+      if (CONFIG.paginas[o]) return 'Desde tu ' + CONFIG.paginas[o].charAt(0).toLowerCase() + CONFIG.paginas[o].slice(1);
+      return o;
+    }
+    // Lo que marcó en «¿Qué te gustaría encontrar?», en las tres cosas que vende.
+    var BUSCA = { 'Info de los próximos retiros': 'retiro', 'Planes y experiencias para parar': 'evento', 'Herramientas para conocerme mejor': 'programa' };
+
+    // Cobros de Stripe: sesiones de pago completas, con su enlace al lado.
+    function pagos(sesiones, enlaces){
+      var porId = {};
+      (enlaces || []).forEach(function(l){ if (l && l.id) porId[l.id] = l; });
+      return (sesiones || []).filter(function(s){
+        return s && s.status === 'complete' && (s.payment_status === 'paid' || s.payment_status === 'no_payment_required');
+      }).map(function(s){
+        var l = porId[s.payment_link] || null;
+        var pi = s.payment_intent && typeof s.payment_intent === 'object' ? s.payment_intent : null;
+        var ch = pi && pi.latest_charge && typeof pi.latest_charge === 'object' ? pi.latest_charge : null;
+        var meta = Object.assign({}, l && l.metadata, l && l.payment_intent_data && l.payment_intent_data.metadata, pi && pi.metadata, s.metadata);
+        var desc = limpio((l && l.payment_intent_data && l.payment_intent_data.description) || (pi && pi.description) || '');
+        var tipo = meta.retiro || /retiro/i.test(desc) ? 'retiro' : (meta.tipo === 'evento' || /evento/i.test(desc) ? 'evento' : 'otro');
+        var cd = s.customer_details || {};
+        var bruto = s.amount_total || 0, devuelto = ch ? (ch.amount_refunded || 0) : 0;
+        return {
+          id: s.id, tipo: tipo, edicion: limpio(meta.retiro), que: desc || (tipo === 'retiro' ? 'Retiro' : tipo === 'evento' ? 'Evento' : 'Cobro'),
+          nombre: limpio(cd.name), email: limpio(cd.email), telefono: limpio(cd.phone),
+          importe: Math.max(0, bruto - devuelto) / 100, devuelto: devuelto / 100, moneda: limpio(s.currency || 'eur').toUpperCase(),
+          fecha: new Date((s.created || 0) * 1000)
+        };
+      }).sort(function(a, b){ return a.fecha - b.fecha; });
+    }
+    function esDeLaEdicion(x){ return x.tipo === 'retiro' && (x.edicion === CONFIG.retiro.clave || (!x.edicion && /febrero/i.test(x.que))); }
+
+    function siguientePaso(p, ahora){
+      var n = primerNombre(p.nombre) || '';
+      var hola = '¡Hola' + (n ? ' ' + n : '') + '! Soy Sara, de Reviondo. ';
+      var pagoRetiro = p.pagos.some(function(x){ return esDeLaEdicion(x) && x.importe > 0; });
+      var formHecho = p.formularios.indexOf(CONFIG.retiro.clave) !== -1;
+      if (pagoRetiro && !formHecho) return { clave: 'formulario', pendiente: true, texto: 'Mandarle el formulario de antes del retiro',
+        msg: hola + 'Ya tienes tu plaza para el retiro ' + CONFIG.retiro.fechas + '. Para prepararlo pensando en ti, ¿me rellenas esto cuando puedas? Son unos minutos: ' + CONFIG.retiro.formulario };
+      if (pagoRetiro) return { clave: 'listo', pendiente: false, texto: 'Todo listo para febrero. Más cerca de la fecha, su itinerario.', msg: '' };
+      if (p.pagos.some(function(x){ return x.tipo === 'evento' && x.importe > 0; })) return { clave: 'evento-pagado', pendiente: true, texto: 'Recordarle el evento unos días antes',
+        msg: hola + 'Te escribo para recordarte el evento. Si te surge cualquier duda antes, aquí me tienes.' };
+      var otra = p.formularios.filter(function(e){ return e !== CONFIG.retiro.clave; })[0];
+      if (otra) return { clave: 'repetir', pendiente: true, texto: 'Contarle febrero: ya vino en ' + otra.split('-')[0],
+        msg: hola + '¿Qué tal sigues después del retiro de ' + otra.split('-')[0] + '? En febrero repetimos, ' + CONFIG.retiro.fechas + '. Si te apetece, aquí lo tienes todo: ' + CONFIG.venta };
+      if (p.intereses.retiro) return { clave: 'retiro', pendiente: true, texto: 'Contarle el retiro de febrero',
+        msg: hola + 'Me dijiste que te interesaban los retiros: el próximo es ' + CONFIG.retiro.fechas + '. Aquí lo tienes todo: ' + CONFIG.venta + ' Si te surge cualquier duda, me dices.' };
+      if (p.intereses.evento) return { clave: 'evento', pendiente: true, texto: 'Contarle el próximo evento',
+        msg: hola + 'Me dijiste que te apetecían planes para parar. Estoy preparando el próximo evento: ¿te aviso en cuanto tenga la fecha?' };
+      if (p.intereses.programa) return { clave: 'programa', pendiente: true, texto: 'Contarle Modo Avión, lo de las seis semanas',
+        msg: hola + 'Me dijiste que te apetecía conocerte mejor. ¿Te cuento cómo es Modo Avión, lo de las seis semanas?' };
+      if (p.comunidad && p.entro && (ahora - p.entro) <= 7 * 864e5) return { clave: 'hola', pendiente: true, texto: 'Saludarle: acaba de entrar',
+        msg: hola + 'Gracias por entrar en la comunidad. ¿Te han llegado los 8 microhábitos? Cualquier cosa, me escribes por aquí.' };
+      return { clave: 'nada', pendiente: false, texto: 'Nada pendiente', msg: '' };
+    }
+
+    // Cada persona una vez: se juntan sus filas por correo o por teléfono.
+    function personas(d, listaPagos, ahora){
+      var nodos = [];
+      (d && d.comunidad || []).forEach(function(e){ nodos.push({ tipo: 'comunidad', r: e, fecha: new Date(e.creado_en), email: claveEmail(e.email), tel: claveTel(e.telefono) }); });
+      (d && d.retiro || []).forEach(function(e){ nodos.push({ tipo: 'formulario', r: e, fecha: new Date(e.creado_en), email: claveEmail(e.email), tel: claveTel(e.telefono) }); });
+      (listaPagos || []).forEach(function(x){ nodos.push({ tipo: 'pago', r: x, fecha: x.fecha, email: claveEmail(x.email), tel: claveTel(x.telefono) }); });
+      var padre = nodos.map(function(_, i){ return i; });
+      function raiz(i){ while (padre[i] !== i) { padre[i] = padre[padre[i]]; i = padre[i]; } return i; }
+      var visto = {};
+      nodos.forEach(function(n, i){
+        [n.email ? 'e:' + n.email : '', n.tel ? 't:' + n.tel : ''].forEach(function(k){
+          if (!k) return;
+          if (visto[k] == null) visto[k] = i; else padre[raiz(i)] = raiz(visto[k]);
+        });
+      });
+      var grupos = {};
+      nodos.forEach(function(n, i){ var k = raiz(i); (grupos[k] = grupos[k] || []).push(n); });
+      return Object.keys(grupos).map(function(k){
+        var ns = grupos[k].slice().sort(function(a, b){ return b.fecha - a.fecha; });
+        var de = function(t){ return ns.filter(function(n){ return n.tipo === t; }); };
+        var com = de('comunidad'), form = de('formulario'), pag = de('pago').map(function(n){ return n.r; });
+        var primero = function(campo){ for (var i = 0; i < ns.length; i++) { var v = limpio(ns[i].r[campo]); if (v) return v; } return ''; };
+        // El nombre, el que escribió en tu formulario antes que el de su tarjeta.
+        var nombre = [com, form].reduce(function(v, lista){ return v || (lista[0] ? limpio(lista[0].r.nombre) : ''); }, '') || primero('nombre');
+        var p = {
+          id: k, nombre: nombre, telefono: primero('telefono'), email: primero('email').toLowerCase(), ciudad: primero('ciudad'),
+          ultima: ns[0].fecha, primera: ns[ns.length - 1].fecha,
+          comunidad: com.length > 0, entro: com.length ? com[com.length - 1].fecha : null,
+          pagos: pag, formularios: form.map(function(n){ return limpio(n.r.retiro); }),
+          intereses: {}, traido: [], busca: [], sobre: '', deDonde: ''
+        };
+        com.slice().reverse().forEach(function(n){
+          var m = partesMensaje(n.r.mensaje);
+          m.traido.forEach(function(v){ if (p.traido.indexOf(v) < 0) p.traido.push(v); });
+          m.busca.forEach(function(v){ if (p.busca.indexOf(v) < 0) p.busca.push(v); if (BUSCA[v]) p.intereses[BUSCA[v]] = 'marcó'; });
+          if (m.sobre) p.sobre = m.sobre;
+          var pr = params(n.r.origen), pal = limpio(n.r.palanca).toLowerCase();
+          if (pal.indexOf('retiro') === 0 || pr.p.indexOf('retiro') === 0) p.intereses.retiro = p.intereses.retiro || 'marcó';
+          if (!p.deDonde) p.deDonde = nombreEnlace(pr.c, pr.p || pal) || 'Enlace directo a tu formulario';
+        });
+        pag.forEach(function(x){ if (x.importe > 0 && x.tipo !== 'otro') p.intereses[x.tipo] = 'pagó'; });
+        if (!p.deDonde) p.deDonde = form.length ? 'Formulario del retiro' : 'Pagó sin pasar por tu comunidad';
+        p.siguiente = siguientePaso(p, ahora);
+        return p;
+      }).sort(function(a, b){ return b.ultima - a.ultima; });
+    }
+
+    function cuenta(lista, clv){
+      var m = {};
+      lista.forEach(function(v){ var k = clv(v); m[k.k] = m[k.k] || { k: k.k, nombre: k.nombre, n: 0 }; m[k.k].n += v.n || 1; });
+      return Object.keys(m).map(function(k){ return m[k]; }).sort(function(a, b){ return b.n - a.n; });
+    }
+
+    return { clave: clave, sumaDias: sumaDias, desde: desde, limpio: limpio, norm: norm, numeroWa: numeroWa, primerNombre: primerNombre,
+      partesMensaje: partesMensaje, params: params, nombreEnlace: nombreEnlace, nombreOrigen: nombreOrigen,
+      pagos: pagos, esDeLaEdicion: esDeLaEdicion, personas: personas, siguientePaso: siguientePaso, cuenta: cuenta };
+  })();
+  if (typeof document === 'undefined') { if (typeof module !== 'undefined') module.exports = { R: R, CONFIG: CONFIG }; return; }
+
+  /* ── Pantalla ─────────────────────────────────────────────────── */
+  var $ = function(id){ return document.getElementById(id); };
+  function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; }
+  function vacia(n){ while (n.firstChild) n.removeChild(n.firstChild); return n; }
+  var fmtHora = new Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit' });
+  var fmtDia = new Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Madrid', weekday: 'short', day: 'numeric', month: 'short' });
+  var fmtMes = new Intl.DateTimeFormat('es-ES', { timeZone: 'Europe/Madrid', month: 'long' });
+  var fmtEur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2, minimumFractionDigits: 0 });
+  function cuando(d){
+    if (!d || isNaN(d)) return '';
+    var hoy = R.clave(new Date()), k = R.clave(d);
+    if (k === hoy) return 'hoy · ' + fmtHora.format(d);
+    if (k === R.sumaDias(hoy, -1)) return 'ayer · ' + fmtHora.format(d);
+    return fmtDia.format(d).replace(/\./g, '');
+  }
+  function euros(n){ return fmtEur.format(n || 0); }
+  function telBonito(t){
+    t = R.limpio(t); var m = t.replace(/[\s.-]/g, '').match(/^\+34(\d{9})$/);
+    if (m) { var d = m[1]; return '+34 ' + d.slice(0, 3) + ' ' + d.slice(3, 5) + ' ' + d.slice(5, 7) + ' ' + d.slice(7); }
+    return t;
+  }
+  function plural(n, uno, varios){ return n === 1 ? uno : varios; }
+
+  var E = { periodo: '30', filtro: 'pendiente', busqueda: '', edicion: CONFIG.retiro.clave,
+    sb: null, st: null, errSb: null, errSt: null, horaSb: null, horaSt: null, leyendo: false, ultima: 0 };
+  try { var gp = localStorage.getItem('panel-periodo'); if (gp === 'hoy' || gp === 'semana' || gp === '30') E.periodo = gp; } catch (e) {}
+
+  var NADA = ['ninguna','ninguno','ningun','nada','no','none','na','0','-','no tengo','no tengo ninguna','no tengo nada','ninguna alergia',
+    'sin alergias','sin alergia','ninguna restriccion','como de todo','de todo','todo','ninguna gracias','nada gracias','ninguna que yo sepa'];
+  function esNada(s){ var n = R.norm(s); return n === '' || NADA.indexOf(n) !== -1; }
+
+  /* Lectura del resultado de execute_sql (el mismo que su buzón) */
+  function datosDeSupabase(res){
+    var p = res ? res.payload : null, txt = null;
+    if (p && typeof p === 'object' && !Array.isArray(p) && typeof p.result === 'string') txt = p.result;
+    else if (typeof p === 'string') txt = p;
+    else if (Array.isArray(p)) return filaADatos(p);
+    if (txt == null && res && Array.isArray(res.content)) {
+      for (var i = 0; i < res.content.length; i++) if (res.content[i].type === 'text') { txt = res.content[i].text; break; }
+    }
+    if (txt == null) throw new Error('respuesta sin texto');
+    try { var j = JSON.parse(txt); if (j && typeof j.result === 'string') txt = j.result; else if (Array.isArray(j)) return filaADatos(j); } catch (e) {}
+    var marca = txt.match(/<untrusted-data-([A-Za-z0-9-]+)>/), cuerpo = txt;
+    if (marca) {
+      var cierre = '</untrusted-data-' + marca[1] + '>', apertura = '<untrusted-data-' + marca[1] + '>';
+      var fin = txt.lastIndexOf(cierre), ini = fin > 0 ? txt.lastIndexOf(apertura, fin) : -1;
+      if (ini >= 0 && fin > ini) cuerpo = txt.slice(ini + apertura.length, fin);
+    }
+    return filaADatos(JSON.parse(cuerpo.trim()));
+  }
+  function filaADatos(filas){
+    var d = filas && filas[0] ? filas[0].datos : null;
+    if (typeof d === 'string') d = JSON.parse(d);
+    if (!d || !Array.isArray(d.comunidad) || !Array.isArray(d.retiro) || !Array.isArray(d.visitas)) throw new Error('forma inesperada');
+    return d;
+  }
+  function listaDeStripe(res){
+    var p = res ? res.payload : null;
+    if (typeof p === 'string') { try { p = JSON.parse(p); } catch (e) {} }
+    if ((!p || typeof p !== 'object') && res && Array.isArray(res.content)) {
+      for (var i = 0; i < res.content.length; i++) if (res.content[i].type === 'text') { try { p = JSON.parse(res.content[i].text); } catch (e) {} break; }
+    }
+    if (!p || !Array.isArray(p.data)) throw new Error('Stripe ha contestado algo que no entiendo');
+    return p;
+  }
+
+  function mensajeDeError(err, s){
+    var c = err && err.code, m = R.limpio(err && (err.message || err)).slice(0, 220);
+    switch (c) {
+      case 'needs_reauth': return s + ' necesita que lo vuelvas a conectar. En Claude: Ajustes → Conectores → ' + s + '.';
+      case 'server_not_connected': return 'No encuentro tu ' + s + ' en esta cuenta de Claude. Añádelo en Ajustes → Conectores y pulsa Actualizar.';
+      case 'selection_required': return 'Tienes más de un ' + s + ' conectado. Elige el de Reviondo en el aviso de Claude.';
+      case 'not_in_manifest': case 'approval_required': return 'Este panel no tiene permiso para leer tu ' + s + '. Pulsa «Dar permiso» o dáselo en los permisos de la página.';
+      case 'blocked_by_policy': return 'Tu cuenta de Claude no deja usar ' + s + ' desde aquí.';
+      case 'tool_error': return s + ' ha contestado con un error: ' + m + (s === 'Supabase' ? ' Si dice que el proyecto está en pausa, entra en supabase.com y pulsa «Resume».' : '');
+      case 'server_unavailable': case 'upstream_error': case 'rate_limited': return s + ' no contesta ahora mismo. Pulsa Actualizar en un rato.';
+      case 'not_granted': case 'capability_disabled': case 'capability_removed': return 'Esta vista no puede leer tus datos. Ábrelo desde tu cuenta de Claude, en la app o en claude.ai.';
+      default: return 'No he podido leer tu ' + s + ': ' + m;
+    }
+  }
+
+  var mcp = null;
+  function llamar(servidor, herramienta, entrada){ return mcp.callTool(servidor, herramienta, entrada, { cache: false }); }
+  function conReintento(f){
+    return f().catch(function(err){
+      if (!err || !err.retryable) throw err;
+      return new Promise(function(ok){ setTimeout(ok, Math.min(err.retryAfterMs || 0, 60000) + 800 + Math.random() * 1200); }).then(f);
+    });
+  }
+  function leerSupabase(){
+    return conReintento(function(){
+      return llamar(CONFIG.supabase.servidor, CONFIG.supabase.herramienta, { project_id: CONFIG.supabase.proyecto, query: SQL });
+    }).then(datosDeSupabase);
+  }
+  function leerStripe(){
+    function lista(op, params){
+      return conReintento(function(){
+        return llamar(CONFIG.stripe.servidor, CONFIG.stripe.herramienta, { stripe_api_operation_id: op, stripe_context: CONFIG.stripe.cuenta, livemode: true, parameters: params });
+      }).then(listaDeStripe);
+    }
+    var sesiones = [];
+    function pagina(despues, n){
+      var params = { status: 'complete', limit: 100, expand: ['data.payment_intent.latest_charge'] };
+      if (despues) params.starting_after = despues;
+      return lista('GetCheckoutSessions', params).then(function(l){
+        sesiones = sesiones.concat(l.data);
+        if (l.has_more && l.data.length && n < 10) return pagina(l.data[l.data.length - 1].id, n + 1);
+      });
+    }
+    return Promise.all([pagina(null, 1), lista('GetPaymentLinks', { limit: 100 })])
+      .then(function(r){ return { sesiones: sesiones, enlaces: r[1].data }; });
+  }
+
+  function ponEstado(id, clase, texto){ var e = $(id); e.className = clase; vacia(e); e.appendChild(el('i', 'punto')); e.appendChild(document.createTextNode(texto)); }
+  function leer(){
+    if (E.leyendo) return;
+    if (!mcp) { pintaSinConector(); return; }
+    E.leyendo = true; $('btn-actualizar').disabled = true;
+    ponEstado('estado-sb', 'cargando', 'Tu base: leyendo…');
+    ponEstado('estado-st', 'cargando', 'Tu Stripe: leyendo…');
+    var a = leerSupabase().then(function(d){ E.sb = d; E.errSb = null; E.horaSb = new Date(); })
+      .catch(function(err){ E.errSb = err; if (err && /needs_reauth|server_not_connected|not_in_manifest|blocked_by_policy|approval_required/.test(err.code)) E.sb = null; });
+    var b = leerStripe().then(function(d){ E.st = d; E.errSt = null; E.horaSt = new Date(); })
+      .catch(function(err){ E.errSt = err; if (err && /needs_reauth|server_not_connected|not_in_manifest|blocked_by_policy|approval_required/.test(err.code)) E.st = null; });
+    Promise.all([a, b]).then(function(){
+      E.leyendo = false; E.ultima = Date.now(); $('btn-actualizar').disabled = false;
+      pinta();
+    });
+  }
+
+  function pintaSinConector(){
+    ponEstado('estado-sb', 'mal', 'Tu base: no se puede leer desde aquí');
+    ponEstado('estado-st', 'mal', 'Tu Stripe: no se puede leer desde aquí');
+    avisoGeneral('Este panel lee tus datos con tu cuenta de Claude. Ábrelo desde la app de Claude o desde claude.ai, con tu sesión iniciada.');
+  }
+  function avisoGeneral(texto, boton){
+    var a = $('aviso'); vacia(a);
+    if (!texto) { a.hidden = true; return; }
+    a.appendChild(el('p', null, texto));
+    if (boton) { var b = el('button', 'btn', boton.texto); b.type = 'button'; b.addEventListener('click', boton.accion); a.appendChild(b); }
+    a.hidden = false;
+  }
+
+  /* ── Pintar ───────────────────────────────────────────────────── */
+  function pinta(){
+    var ahora = new Date(), desde = R.desde(E.periodo, ahora);
+    var listaPagos = E.st ? R.pagos(E.st.sesiones, E.st.enlaces) : [];
+    var gente = E.sb || E.st ? R.personas(E.sb || { comunidad: [], retiro: [], visitas: [] }, listaPagos, ahora) : [];
+    var enPeriodo = function(d){ return d && R.clave(d) >= desde; };
+
+    // Estado de cada fuente
+    if (E.errSb) ponEstado('estado-sb', 'mal', 'Tu base: ' + mensajeDeError(E.errSb, 'Supabase'));
+    else if (E.horaSb) ponEstado('estado-sb', 'ok', 'Tu base: al día · ' + fmtHora.format(E.horaSb));
+    if (E.errSt) ponEstado('estado-st', 'mal', 'Tu Stripe: ' + mensajeDeError(E.errSt, 'Stripe'));
+    else if (E.horaSt) ponEstado('estado-st', 'ok', 'Tu Stripe: al día · ' + fmtHora.format(E.horaSt));
+    var permiso = [E.errSb, E.errSt].some(function(e){ return e && (e.code === 'approval_required' || e.code === 'not_in_manifest'); });
+    avisoGeneral(permiso ? 'Para leer tus datos, Claude te pide permiso la primera vez.' : '', permiso ? { texto: 'Dar permiso', accion: leer } : null);
+
+    // 1-4 · Las cifras
+    var visitas = E.sb ? E.sb.visitas.filter(function(v){ return v.dia >= desde; }) : [];
+    var nVisitas = visitas.reduce(function(s, v){ return s + v.n; }, 0);
+    var entran = E.sb ? E.sb.comunidad.filter(function(e){ return enPeriodo(new Date(e.creado_en)); }) : [];
+    var pagados = listaPagos.filter(function(x){ return x.importe > 0 && enPeriodo(x.fecha); });
+    var preparan = E.sb ? E.sb.retiro.filter(function(e){ return enPeriodo(new Date(e.creado_en)); }) : [];
+    $('c-llegan').textContent = E.sb ? nVisitas : '–';
+    $('c-entran').textContent = E.sb ? entran.length : '–';
+    $('c-reservan').textContent = E.st ? pagados.length : '–';
+    $('c-reservan-sub').textContent = E.st ? (pagados.length ? euros(pagados.reduce(function(s, x){ return s + x.importe; }, 0)) + ' en total' : 'pagos') : 'pagos';
+    $('c-preparan').textContent = E.sb ? preparan.length : '–';
+    var r = $('ratio');
+    if (E.sb && nVisitas >= 20) { r.textContent = 'De cada 100 visitas, ' + Math.round(entran.length * 100 / nVisitas) + ' entran en tu comunidad.'; r.hidden = false; }
+    else r.hidden = true;
+
+    pintaLlegan(visitas, nVisitas, desde);
+    pintaEntran(entran, gente);
+    pintaReservan(pagados, gente);
+    pintaCobrado(listaPagos, ahora);
+    pintaRetiro(listaPagos, gente);
+    pintaPersonas(gente);
+  }
+
+  function errorDe(fuente){
+    var err = fuente === 'sb' ? E.errSb : E.errSt, datos = fuente === 'sb' ? E.sb : E.st;
+    if (datos) return null;
+    if (err) return el('p', 'aviso', mensajeDeError(err, fuente === 'sb' ? 'Supabase' : 'Stripe'));
+    return el('p', 'vacio', 'Leyendo…');
+  }
+
+  function barras(items, total){
+    var cont = el('div', 'barras'), max = items.reduce(function(m, i){ return Math.max(m, i.n); }, 0) || 1;
+    items.forEach(function(i){
+      var f = el('div', 'barra');
+      f.appendChild(el('span', 'nombre', i.nombre));
+      f.appendChild(el('span', 'valor', i.n + (total ? ' · ' + Math.round(i.n * 100 / total) + ' %' : '')));
+      var pista = el('div', 'pista'), rel = el('div', 'relleno');
+      rel.style.width = (i.n * 100 / max) + '%';
+      pista.appendChild(rel); f.appendChild(pista); cont.appendChild(f);
+    });
+    return cont;
+  }
+  function caja(titulo, hijo){ var c = el('div', 'caja'); c.appendChild(el('h3', null, titulo)); c.appendChild(hijo); return c; }
+
+  function pintaLlegan(visitas, total, desde){
+    var cuerpo = vacia($('llegan-cuerpo')), err = errorDe('sb');
+    if (err) { cuerpo.appendChild(err); return; }
+    var todas = E.sb.visitas;
+    if (!todas.length) {
+      cuerpo.appendChild(el('p', 'vacio', 'Todavía no hay visitas. El contador empieza a contar en cuanto se publiquen tus páginas con él (tu formulario de entrada y el de antes del retiro; tu página de venta, cuando VIBRA la suba).'));
+    } else if (!total) {
+      cuerpo.appendChild(el('p', 'vacio', 'Ninguna visita en este periodo.'));
+    } else {
+      var dos = el('div', 'dos');
+      dos.appendChild(caja('A qué página', barras(R.cuenta(visitas, function(v){ return { k: v.pagina, nombre: CONFIG.paginas[v.pagina] || v.pagina }; }), total)));
+      dos.appendChild(caja('De qué web vienen', barras(R.cuenta(visitas, function(v){ return { k: v.origen || '', nombre: R.nombreOrigen(v.origen) }; }), total)));
+      cuerpo.appendChild(dos);
+      var conEnlace = visitas.filter(function(v){ return v.c || v.p; });
+      var dos2 = el('div', 'dos');
+      dos2.appendChild(caja('Con qué enlace', conEnlace.length
+        ? barras(R.cuenta(conEnlace, function(v){ var k = (v.c || '') + '|' + (v.p || ''); return { k: k, nombre: R.nombreEnlace(v.c || '', v.p || '') }; }))
+        : el('p', 'nota', 'Ninguna con ?c= ni ?p= en el enlace.')));
+      dos2.appendChild(caja('Desde qué aparato', barras(R.cuenta(visitas, function(v){ var a = v.aparato || ''; return { k: a, nombre: a === 'movil' ? 'Móvil' : a === 'tablet' ? 'Tablet' : a === 'ordenador' ? 'Ordenador' : 'Sin dato' }; }), total)));
+      cuerpo.appendChild(dos2);
+    }
+    if (todas.length) {
+      var hoy = R.clave(new Date()), porDia = {};
+      todas.forEach(function(v){ porDia[v.dia] = (porDia[v.dia] || 0) + v.n; });
+      var max = 1, dias = [];
+      for (var i = 29; i >= 0; i--) { var k = R.sumaDias(hoy, -i); dias.push(k); max = Math.max(max, porDia[k] || 0); }
+      var graf = el('div', 'dias'); graf.setAttribute('role', 'img');
+      graf.setAttribute('aria-label', 'Visitas por día en los últimos 30 días. Máximo ' + max + ' en un día.');
+      dias.forEach(function(k){ var b = el('div', k >= desde ? 'en' : ''); b.style.height = ((porDia[k] || 0) * 100 / max) + '%'; b.title = k + ': ' + (porDia[k] || 0); graf.appendChild(b); });
+      var pie = el('div', 'dias-pie'); pie.appendChild(el('span', null, 'hace 30 días')); pie.appendChild(el('span', null, 'máx. ' + max + ' al día')); pie.appendChild(el('span', null, 'hoy'));
+      var c = el('div', 'caja'); c.appendChild(el('h3', null, 'Día a día')); c.appendChild(graf); c.appendChild(pie);
+      cuerpo.appendChild(c);
+    }
+    var yo = el('details');
+    yo.appendChild(el('summary', null, 'Que no te cuente a ti'));
+    var t = el('div'); t.style.marginTop = '8px';
+    t.appendChild(el('p', 'nota', 'Abre cada enlace una vez en el móvil y el navegador con los que miras tus páginas. Desde ahí, tus visitas ya no cuentan.'));
+    var ul = el('ul', 'limpia');
+    CONFIG.noContar.forEach(function(x){ var li = el('li'); li.style.padding = '4px 0'; var a = el('a', null, x[0]); a.href = x[1]; a.target = '_blank'; a.rel = 'noopener'; li.appendChild(a); ul.appendChild(li); });
+    t.appendChild(ul); yo.appendChild(t); cuerpo.appendChild(yo);
+  }
+
+  function tarjeta(p, compacta){
+    var a = el('article', 'persona' + (p.siguiente.pendiente ? ' pendiente' : ''));
+    var cab = el('div', 'p-cab'); cab.appendChild(el('h3', null, p.nombre || 'Sin nombre')); cab.appendChild(el('span', 'cuando', cuando(p.ultima)));
+    a.appendChild(cab);
+    var chips = el('div', 'chips');
+    chips.appendChild(el('span', 'chip', p.deDonde));
+    ['retiro', 'evento', 'programa'].forEach(function(t){
+      if (!p.intereses[t]) return;
+      var nombre = t === 'programa' ? 'Programa' : t.charAt(0).toUpperCase() + t.slice(1);
+      chips.appendChild(el('span', 'chip ' + t, nombre + (p.intereses[t] === 'pagó' ? ' · pagado' : '')));
+    });
+    if (p.formularios.length) {
+      var hecho = p.formularios.indexOf(CONFIG.retiro.clave) !== -1;
+      if (hecho) chips.appendChild(el('span', 'chip ok', 'Formulario de febrero ✓'));
+      else chips.appendChild(el('span', 'chip', 'Vino en ' + p.formularios[0].split('-')[0]));
+    }
+    if (p.siguiente.clave === 'formulario') chips.appendChild(el('span', 'chip falta', 'Le falta el formulario'));
+    a.appendChild(chips);
+    var sig = el('p', 'sig'); sig.appendChild(el('span', 'et', 'Siguiente paso')); sig.appendChild(document.createTextNode(p.siguiente.texto));
+    a.appendChild(sig);
+    var acc = el('div', 'acciones'), num = R.numeroWa(p.telefono);
+    if (num) {
+      var w = el('a', 'wa' + (p.siguiente.msg ? '' : ' suave'), p.siguiente.msg ? 'Escribirle por WhatsApp' : 'Abrir su WhatsApp');
+      w.href = 'https://wa.me/' + num + (p.siguiente.msg ? '?text=' + encodeURIComponent(p.siguiente.msg) : '');
+      w.target = '_blank'; w.rel = 'noopener';
+      acc.appendChild(w);
+    }
+    acc.appendChild(el('span', 'contacto', [telBonito(p.telefono), p.email].filter(Boolean).join(' · ')));
+    a.appendChild(acc);
+    if (!compacta && (p.siguiente.msg || p.busca.length || p.traido.length || p.sobre)) {
+      var det = el('details'); det.appendChild(el('summary', null, 'Lo que te contó y el mensaje'));
+      var txt = [];
+      if (p.traido.length) txt.push('Qué le ha traído: ' + p.traido.join(' · '));
+      if (p.busca.length) txt.push('Qué busca: ' + p.busca.join(' · '));
+      if (p.sobre) txt.push('Lo que contó: ' + p.sobre);
+      if (p.siguiente.msg) txt.push('Mensaje que se abre en WhatsApp:\n' + p.siguiente.msg);
+      det.appendChild(el('p', null, txt.join('\n\n')));
+      a.appendChild(det);
+    }
+    return a;
+  }
+  function personaDe(gente, email, tel){
+    email = R.limpio(email).toLowerCase(); var t = R.limpio(tel).replace(/\D/g, '').slice(-9);
+    for (var i = 0; i < gente.length; i++) {
+      var g = gente[i];
+      if ((email && g.email === email) || (t.length === 9 && R.limpio(g.telefono).replace(/\D/g, '').slice(-9) === t)) return g;
+    }
+    return null;
+  }
+
+  function pintaEntran(entran, gente){
+    var cuerpo = vacia($('entran-cuerpo')), err = errorDe('sb');
+    if (err) { cuerpo.appendChild(err); return; }
+    if (!entran.length) { cuerpo.appendChild(el('p', 'vacio', 'Nadie nuevo en este periodo.')); return; }
+    var lista = el('div', 'lista'), vistas = {};
+    entran.forEach(function(e){
+      var p = personaDe(gente, e.email, e.telefono);
+      if (!p || vistas[p.id]) return; vistas[p.id] = 1;
+      lista.appendChild(tarjeta(p, false));
+    });
+    cuerpo.appendChild(lista);
+  }
+
+  function pintaReservan(pagados, gente){
+    var cuerpo = vacia($('reservan-cuerpo')), err = errorDe('st');
+    if (err) { cuerpo.appendChild(err); return; }
+    if (!pagados.length) { cuerpo.appendChild(el('p', 'vacio', 'Ningún pago en este periodo. Cuando alguien pague tu enlace de reserva o la entrada de un evento, sale aquí.')); return; }
+    var lista = el('div', 'lista'), vistas = {};
+    pagados.slice().reverse().forEach(function(x){
+      var p = personaDe(gente, x.email, x.telefono);
+      if (!p || vistas[p.id]) return; vistas[p.id] = 1;
+      var t = tarjeta(p, true);
+      var linea = el('p', 'nota', x.que + ' · ' + euros(x.importe) + (x.devuelto ? ' (devuelto ' + euros(x.devuelto) + ')' : '') + ' · ' + cuando(x.fecha));
+      t.insertBefore(linea, t.children[1]);
+      lista.appendChild(t);
+    });
+    cuerpo.appendChild(lista);
+  }
+
+  function pintaCobrado(listaPagos, ahora){
+    var cuerpo = vacia($('cobrado-cuerpo')), err = errorDe('st');
+    if (err) { cuerpo.appendChild(err); return; }
+    var mes = R.clave(ahora).slice(0, 7);
+    var delMes = listaPagos.filter(function(x){ return R.clave(x.fecha).slice(0, 7) === mes && x.importe > 0; });
+    var total = delMes.reduce(function(s, x){ return s + x.importe; }, 0);
+    var c = el('div', 'caja');
+    c.appendChild(el('h3', null, 'En ' + fmtMes.format(ahora) + ', por Stripe'));
+    c.appendChild(el('p', 'grande num', euros(total)));
+    c.appendChild(el('p', 'nota', delMes.length + ' ' + plural(delMes.length, 'pago', 'pagos') + '. Lo que te paguen en mano o por transferencia no sale aquí.'));
+    var tipos = { retiro: 'Señales del retiro', evento: 'Eventos', otro: 'Otros cobros' };
+    var hay = false, filas = el('div'); filas.style.marginTop = '10px';
+    Object.keys(tipos).forEach(function(t){
+      var de = delMes.filter(function(x){ return x.tipo === t; }); if (!de.length) return; hay = true;
+      var f = el('div', 'fila-dato'); f.appendChild(el('span', null, tipos[t] + ' · ' + de.length));
+      f.appendChild(el('span', 'v', euros(de.reduce(function(s, x){ return s + x.importe; }, 0)))); filas.appendChild(f);
+    });
+    if (hay) c.appendChild(filas);
+    cuerpo.appendChild(c);
+  }
+
+  function pintaRetiro(listaPagos, gente){
+    var cuerpo = vacia($('retiro-cuerpo'));
+    var esFeb = E.edicion === CONFIG.retiro.clave;
+    $('retiro-titulo').textContent = esFeb ? CONFIG.retiro.nombre : 'Tu retiro de ' + E.edicion.replace('-', ' ');
+    // Elegir edición (por si quieres mirar la de octubre)
+    var ediciones = [CONFIG.retiro.clave];
+    if (E.sb) E.sb.retiro.forEach(function(r){ var k = R.limpio(r.retiro); if (k && ediciones.indexOf(k) < 0) ediciones.push(k); });
+    if (ediciones.length > 1) {
+      var lab = el('label', 'elegir'); lab.appendChild(document.createTextNode('Edición'));
+      var sel = el('select'); sel.id = 'edicion';
+      ediciones.forEach(function(k){ var o = el('option', null, k.replace('-', ' ')); o.value = k; if (k === E.edicion) o.selected = true; sel.appendChild(o); });
+      sel.addEventListener('change', function(){ E.edicion = sel.value; pinta(); });
+      lab.appendChild(sel); cuerpo.appendChild(lab);
+    }
+
+    // Plazas (solo la edición de febrero tiene enlace de reserva en Stripe)
+    if (esFeb) {
+      var err = errorDe('st');
+      if (err) cuerpo.appendChild(err);
+      else {
+        var plazas = listaPagos.filter(function(x){ return R.esDeLaEdicion(x) && x.importe > 0; });
+        var c = el('div', 'caja');
+        var fila = el('div', 'plazas');
+        var g = el('p', 'grande num', String(plazas.length)); g.appendChild(el('span', null, ' de ' + CONFIG.retiro.plazas));
+        fila.appendChild(g);
+        var bolas = el('div', 'bolas'); bolas.setAttribute('role', 'img'); bolas.setAttribute('aria-label', plazas.length + ' plazas pagadas de ' + CONFIG.retiro.plazas);
+        for (var i = 0; i < CONFIG.retiro.plazas; i++) bolas.appendChild(el('span', 'bola' + (i < plazas.length ? ' llena' : '')));
+        fila.appendChild(bolas);
+        c.appendChild(fila);
+        var libres = CONFIG.retiro.plazas - plazas.length, baratas = Math.max(0, CONFIG.retiro.baratas - plazas.length);
+        c.appendChild(el('p', 'nota', plazas.length ? (libres > 0 ? libres + ' ' + plural(libres, 'plaza libre', 'plazas libres') + (baratas ? ', ' + baratas + ' todavía a ' + CONFIG.retiro.precioBarato + ' €' : ', ya a ' + CONFIG.retiro.precio + ' €') + '.' : 'Completo.') :
+          'Nadie ha pagado la señal todavía. Las tres primeras plazas son a ' + CONFIG.retiro.precioBarato + ' € y el resto a ' + CONFIG.retiro.precio + ' €.'));
+        if (plazas.length) {
+          var lista = el('div'); lista.style.marginTop = '10px';
+          var senal = 0, queda = 0;
+          plazas.forEach(function(x, i){
+            var precio = i < CONFIG.retiro.baratas ? CONFIG.retiro.precioBarato : CONFIG.retiro.precio, p = personaDe(gente, x.email, x.telefono);
+            var hecho = p && p.formularios.indexOf(CONFIG.retiro.clave) !== -1, alli = Math.max(0, precio - x.importe);
+            senal += x.importe; queda += alli;
+            var fila = el('div', 'plaza'), cab = el('div', 'plaza-cab');
+            cab.appendChild(el('b', null, (i + 1) + '. ' + ((p && p.nombre) || x.nombre || 'Sin nombre')));
+            cab.appendChild(el('span', 'chip ' + (hecho ? 'ok' : 'falta'), hecho ? 'Formulario ✓' : 'Le falta el formulario'));
+            fila.appendChild(cab);
+            fila.appendChild(el('span', 'cifras', 'Señal ' + euros(x.importe) + ' · su plaza ' + precio + ' € · queda allí ' + euros(alli) + ' · ' + cuando(x.fecha)));
+            lista.appendChild(fila);
+          });
+          c.appendChild(lista);
+          var res = el('div'); res.style.marginTop = '10px';
+          [['Cobrado en señales', euros(senal)], ['Queda por cobrar allí', euros(queda)]].forEach(function(f){
+            var d = el('div', 'fila-dato'); d.appendChild(el('span', null, f[0])); d.appendChild(el('span', 'v', f[1])); res.appendChild(d);
+          });
+          c.appendChild(res);
+        }
+        var enlaces = (E.st.enlaces || []).filter(function(l){ return l.active && l.metadata && l.metadata.retiro === CONFIG.retiro.clave; });
+        if (enlaces.length) {
+          var rs = enlaces[0].restrictions && enlaces[0].restrictions.completed_sessions;
+          c.appendChild(el('p', 'nota', 'Tu enlace de reserva está activo' + (rs ? ' y se cierra solo a las ' + rs.limit + ' reservas.' : '.')));
+        } else c.appendChild(el('p', 'nota', 'No veo ningún enlace de reserva activo para esta edición en tu Stripe.'));
+        cuerpo.appendChild(c);
+      }
+    }
+
+    // Por dentro: lo del formulario de antes del retiro
+    var errSb = errorDe('sb');
+    if (errSb) { cuerpo.appendChild(errSb); return; }
+    var resp = E.sb.retiro.filter(function(r){ return R.limpio(r.retiro) === E.edicion; });
+    var dentro = el('div', 'caja');
+    dentro.appendChild(el('h3', null, 'Por dentro · ' + resp.length + ' ' + plural(resp.length, 'formulario', 'formularios')));
+    if (!resp.length) {
+      dentro.appendChild(el('p', 'nota', 'Nadie lo ha rellenado todavía. Se manda a quien paga la señal; su enlace es ' + (esFeb ? CONFIG.retiro.formulario : '…?r=' + E.edicion) + '.'));
+      cuerpo.appendChild(dentro); return;
+    }
+    // Cocina
+    var conAlgo = resp.filter(function(r){ return !esNada(r.alimentacion); }), sinNada = resp.length - conAlgo.length;
+    dentro.appendChild(el('p', null, 'Para la cocina')).style.fontWeight = '600';
+    var ul = el('ul', 'limpia cocina');
+    conAlgo.forEach(function(r){ var li = el('li'); li.appendChild(el('b', null, (r.nombre || 'Sin nombre') + ': ')); li.appendChild(document.createTextNode(R.limpio(r.alimentacion))); ul.appendChild(li); });
+    if (!conAlgo.length) ul.appendChild(el('li', null, 'Nadie ha dicho alergias ni restricciones.'));
+    dentro.appendChild(ul);
+    dentro.appendChild(el('p', 'nota', (sinNada ? sinNada + ' ' + plural(sinNada, 'persona come', 'personas comen') + ' de todo. ' : '') + 'Es un dato de salud: solo para la cocina, no se copia a ningún sitio.'));
+    // Fotos
+    var noFotos = resp.filter(function(r){ return r.consent_imagen === false; });
+    var f = el('div', 'fila-dato'); f.style.marginTop = '12px';
+    f.appendChild(el('span', null, 'No quieren salir en fotos'));
+    f.appendChild(el('span', 'v', noFotos.length ? noFotos.map(function(r){ return r.nombre; }).join(', ') : 'nadie'));
+    dentro.appendChild(f);
+    // Esterilla
+    var trae = resp.filter(function(r){ return /^s/i.test(R.limpio(r.esterilla)); }), noTrae = resp.filter(function(r){ return /^no/i.test(R.limpio(r.esterilla)); });
+    var e1 = el('div', 'fila-dato'); e1.appendChild(el('span', null, 'Traen esterilla · ' + trae.length)); e1.appendChild(el('span', 'v', ''));
+    var e2 = el('div', 'fila-dato'); e2.appendChild(el('span', null, 'Necesitan esterilla · ' + noTrae.length)); e2.appendChild(el('span', 'v', noTrae.map(function(r){ return r.nombre; }).join(', ')));
+    dentro.appendChild(e1); dentro.appendChild(e2);
+    // Yoga
+    var yoga = R.cuenta(resp.map(function(r){ return { n: 1, y: R.limpio(r.yoga_nivel) || 'Sin contestar' }; }), function(v){ return { k: v.y, nombre: v.y }; });
+    var y = el('div', 'fila-dato'); y.appendChild(el('span', null, 'Yoga')); y.appendChild(el('span', 'v', yoga.map(function(v){ return v.nombre + ' ' + v.n; }).join(' · '))); dentro.appendChild(y);
+    // Cómo llega
+    var cl = el('div', 'fila-dato'); cl.appendChild(el('span', null, 'Desde dónde vienen'));
+    cl.appendChild(el('span', 'v', R.cuenta(resp.map(function(r){ return { n: 1, c: R.limpio(r.ciudad) || 'Sin ciudad' }; }), function(v){ return { k: R.norm(v.c), nombre: v.c }; }).map(function(v){ return v.nombre + (v.n > 1 ? ' ' + v.n : ''); }).join(', ')));
+    cl.querySelector('.v').style.whiteSpace = 'normal'; cl.querySelector('.v').style.textAlign = 'right';
+    dentro.appendChild(cl);
+    dentro.appendChild(el('p', 'nota', 'Cómo llega cada persona (coche, tren…) no lo pregunta tu formulario: aquí ves su ciudad. Si quieres saberlo, se añade la pregunta; dímelo y lo hablamos.'));
+    cuerpo.appendChild(dentro);
+  }
+
+  function pintaPersonas(gente){
+    var cuerpo = vacia($('personas-cuerpo'));
+    if (!E.sb && !E.st) { cuerpo.appendChild(errorDe('sb') || el('p', 'vacio', 'Leyendo…')); return; }
+    var q = R.norm(E.busqueda), qTel = E.busqueda.replace(/\D/g, '');
+    var lista = gente.filter(function(p){
+      if (E.filtro === 'pendiente' && !p.siguiente.pendiente) return false;
+      if (E.filtro === 'pagado' && !p.pagos.some(function(x){ return x.importe > 0; })) return false;
+      if (q && R.norm(p.nombre + ' ' + p.email).indexOf(q) === -1 && !(qTel.length >= 3 && R.limpio(p.telefono).replace(/\D/g, '').indexOf(qTel) !== -1)) return false;
+      return true;
+    });
+    var cont = el('p', 'nota', lista.length + ' de ' + gente.length + ' ' + plural(gente.length, 'persona', 'personas'));
+    cuerpo.appendChild(cont);
+    if (!lista.length) { cuerpo.appendChild(el('p', 'vacio', E.filtro === 'pendiente' ? 'No tienes a nadie pendiente de escribir.' : 'Nadie con ese filtro.')); return; }
+    var ul = el('div', 'lista');
+    lista.slice(0, 200).forEach(function(p){ ul.appendChild(tarjeta(p, false)); });
+    cuerpo.appendChild(ul);
+  }
+
+  /* ── Controles ────────────────────────────────────────────────── */
+  function marcaPeriodo(){ document.querySelectorAll('[data-periodo]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-periodo') === E.periodo)); }); }
+  document.querySelectorAll('[data-periodo]').forEach(function(b){
+    b.addEventListener('click', function(){ E.periodo = b.getAttribute('data-periodo'); try { localStorage.setItem('panel-periodo', E.periodo); } catch (e) {} marcaPeriodo(); pinta(); });
+  });
+  document.querySelectorAll('[data-filtro]').forEach(function(b){
+    b.addEventListener('click', function(){
+      E.filtro = b.getAttribute('data-filtro');
+      document.querySelectorAll('[data-filtro]').forEach(function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+      pinta();
+    });
+  });
+  var tBusca = null;
+  $('buscar').addEventListener('input', function(){ clearTimeout(tBusca); var v = this.value; tBusca = setTimeout(function(){ E.busqueda = v; pinta(); }, 200); });
+  $('btn-actualizar').addEventListener('click', leer);
+  document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'visible' && Date.now() - E.ultima > CONFIG.cadaMs) leer(); });
+  setInterval(function(){ if (document.visibilityState === 'visible') leer(); }, CONFIG.cadaMs);
+  marcaPeriodo();
+  pinta();
+
+  // Datos de prueba solo para mirarlo en local, nunca en su panel publicado.
+  if (window.__datosDePrueba) { E.sb = window.__datosDePrueba.sb; E.st = window.__datosDePrueba.st; E.horaSb = E.horaSt = new Date(); pinta(); return; }
+  if (window.claude && typeof window.claude.use === 'function') {
+    window.claude.use('mcp').then(function(m){ mcp = m; leer(); }, function(){ pintaSinConector(); });
+  } else pintaSinConector();
+})();
+</script>
