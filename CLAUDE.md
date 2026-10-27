@@ -16,7 +16,7 @@ aquí lo ve cualquiera.
 | Carpeta | Dónde se ve | Para qué |
 |---|---|---|
 | `sitios/comunidad/` | https://reviondo-comunidad.netlify.app | La puerta de entrada a su comunidad de WhatsApp. Pública. Su página del retiro enlaza aquí con `?p=modo-avion`, `?p=gestalt` o `?p=desconexion` |
-| `sitios/comunidad/netlify.toml` | `…/qr` y `…/qr/<lugar>` | Su QR impreso (27/10). Hoy lleva a su Instagram (lo pidió ella); para contar por lugar, a `?c=qr` o `?c=qr-<lugar>`. El QR no cambia nunca: se cambia el `to` |
+| `sitios/comunidad/netlify.toml` | https://reviondo-comunidad.netlify.app/qr | Su QR impreso (27/10): uno solo, un solo diseño («Escanea y entra»). Hoy lleva a su Instagram (lo pidió ella). El QR no cambia nunca: se cambia el `to` y se publica comunidad |
 | `sitios/retiro-formulario/` | https://reviondo-retiro-formulario.netlify.app | El formulario de ANTES del retiro. Solo para quien ya ha pagado, por privado. La edición va en `?r=` (por defecto `febrero-2027` desde el 27/10) |
 | `sitios/retiro-formulario/public/gracias/` | …/gracias/ | Gracias al pagar la señal del retiro (27/10). Botón al formulario con `?r=febrero-2027`. Su grupo llega en el enlace de pago (`?grupo=`), nunca en el archivo |
 | `sitios/retiro-formulario/public/gracias-evento/` | …/gracias-evento/ | Gracias al pagar un evento (27/10). Día, hora, sitio, mapa y grupo llegan en el enlace de pago de cada evento (`?dia=&hora=&lugar=&mapa=&grupo=`): un evento nuevo no se publica |
