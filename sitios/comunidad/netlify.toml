@@ -16,3 +16,25 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+# ── Su QR (27/10) ───────────────────────────────────────────────────────────
+# El QR impreso dice siempre reviondo-comunidad.netlify.app/qr (o /qr/<lugar>)
+# y no cambia nunca. Lo que cambia es adónde lleva: la línea `to`.
+#   /qr          → lo de siempre: su móvil, clases, eventos     → ?c=qr
+#   /qr/<lugar>  → un QR por lugar, para contarlo aparte        → ?c=qr-<lugar>
+#                  (/qr/flowfest → ?c=qr-flowfest). Un lugar nuevo no hay que
+#                  publicarlo: vale cualquier nombre, basta imprimir su QR.
+# El formulario guarda la dirección entera en `origen`, y de ahí saca su panel
+# el `?c=` de cada persona.
+# 302 y no 301: un 301 se queda guardado en el móvil de quien ya lo escaneó, y
+# luego cambiar el destino no le llegaría.
+# El día que exista su puerta, en las dos `to` se cambia "/" por su dirección.
+[[redirects]]
+  from = "/qr"
+  to = "/?c=qr"
+  status = 302
+
+[[redirects]]
+  from = "/qr/:lugar"
+  to = "/?c=qr-:lugar"
+  status = 302
